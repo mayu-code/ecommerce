@@ -44,7 +44,7 @@ public class AuthController {
         return new ResponseEntity<>("User Not Found !",HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    //user login
+    // user login
 
     @PostMapping("/user/login")
     public ResponseEntity<User> userLogin(@RequestBody LoginUser user){
