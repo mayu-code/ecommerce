@@ -1,5 +1,8 @@
 package com.main.ecommerce.services.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.main.ecommerce.entities.Product;
@@ -57,6 +60,19 @@ public class UserServiceImpl implements UserServices{
         reposotory.save(user1);
 
         return productReposotory.findById(id).get();
+    }
+
+    @Override
+    public void deleteUser(long id) {
+       this.reposotory.deleteById(id);
+
+    }
+
+    @Override
+    public List<User> getAllUsers() {
+        List<User> users = new ArrayList<>();
+        users = this.reposotory.findAll();
+        return users;
     }
     
 }

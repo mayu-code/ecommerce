@@ -54,9 +54,11 @@ public class UserController {
         }
     }
 
-    public ResponseEntity<String> updateUser(User user){
+    public ResponseEntity<User> updateUser(User user){
+        User user1 = new User();
         try{
-            return null;
+            user1 = userServiceImpl.updateUser(user1);
+            return ResponseEntity.of(Optional.of(user1));
         }
         catch(Exception e){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -88,7 +90,7 @@ public class UserController {
 
     public ResponseEntity<User> getUserById(@PathVariable("id") long id){
         try{
-            return null;
+            return ResponseEntity.of(Optional.of(userServiceImpl.getUserbyid(id)));
         }
         catch(Exception e){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
