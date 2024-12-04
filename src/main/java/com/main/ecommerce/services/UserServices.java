@@ -14,5 +14,5 @@ public interface UserServices {
     public Product addOrder(User user , long id);
     public void deleteUser(long id);
     public List<User> getAllUsers();
-    
+    User getByEmail(String email);
 }

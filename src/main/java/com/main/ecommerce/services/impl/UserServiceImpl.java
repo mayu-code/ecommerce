@@ -76,5 +76,10 @@ public class UserServiceImpl implements UserServices{
         users = this.reposotory.findAll();
         return users;
     }
+
+    @Override
+    public User getByEmail(String email) {
+       return this.reposotory.findByEmail(email);
+    }
     
 }

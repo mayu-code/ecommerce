@@ -67,5 +67,10 @@ public class AdminServiceImpl implements AdminServices{
     public Boolean isExist(long id) {
         return this.repository.existsById(id);
     }
+
+    @Override
+    public Admin getByEmail(String email) {
+        return this.getByEmail(email);
+    }
     
 }

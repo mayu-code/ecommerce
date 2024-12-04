@@ -26,7 +26,7 @@ public interface AdminServices {
 
     void deleteUser(long userId);
 
-
+    Admin getByEmail(String email);
 
 
 }
