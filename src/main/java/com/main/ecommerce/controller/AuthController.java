@@ -26,8 +26,6 @@ public class AuthController {
     private AdminServiceImpl adminService;
 
 
-    //admin login
-
 
 
     //user registration
