@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.main.ecommerce.entities.Product;
 import com.main.ecommerce.entities.User;
@@ -11,6 +12,7 @@ import com.main.ecommerce.repository.ProductReposotory;
 import com.main.ecommerce.repository.UserReposotory;
 import com.main.ecommerce.services.UserServices;
 
+@Service
 public class UserServiceImpl implements UserServices{
 
     @Autowired

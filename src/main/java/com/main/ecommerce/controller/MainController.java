@@ -47,10 +47,10 @@ public class MainController {
     }
 
     @GetMapping("/getProductBySubCategery/{subcategery}")
-    public ResponseEntity<List<Product>> allProductsbySubCategery(@PathVariable("Subcategery") String subcategery){
+    public ResponseEntity<List<Product>> allProductsbySubCategery(@PathVariable("subcategery") String subcategery){
         List<Product> products = new ArrayList<>();
         try{
-            products = productServiceImpl.getProductbyCategery(subcategery);
+            products = productServiceImpl.getProdectbySubCategery(subcategery);
             return ResponseEntity.of(Optional.of(products));
 
         }catch(Exception e){
