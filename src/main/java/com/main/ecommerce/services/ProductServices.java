@@ -14,7 +14,7 @@ public interface ProductServices {
 
     public Product updateProduct(Product product);
 
-    public List<Product> allProducts ();
+    public List<Product> allProducts();
 
     public Product AddProduct(Product product);
 

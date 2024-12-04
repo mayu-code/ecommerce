@@ -39,13 +39,11 @@ public class AdminServiceImpl implements AdminServices{
 
         return this.repository.save(admin);
 
-        
-
     }
 
     @Override
     public List<User> getAllUsers() {
-        return new ArrayList<>();
+        return this.userService.getAllUsers();
     }
 
     @Override
@@ -55,7 +53,7 @@ public class AdminServiceImpl implements AdminServices{
 
     @Override
     public void deleteUser(long userId) {
-        
+        this.userService.deleteUser(userId);
     }
     
 }
