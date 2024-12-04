@@ -6,5 +6,4 @@ import com.main.ecommerce.entities.User;
 
 public interface UserReposotory extends JpaRepository<User,Long> {
 
-    
 } 
