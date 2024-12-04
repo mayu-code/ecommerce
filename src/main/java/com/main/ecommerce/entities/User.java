@@ -1,6 +1,7 @@
 package com.main.ecommerce.entities;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -30,9 +31,9 @@ public class User {
 	private String password;
 	private boolean isActive ;
 	private boolean isDeleted ;
-	private String registationDate;
-	private String loginDate;
-	private String updateDate;
+	private Date registationDate;
+	private Date loginDate;
+	private Date updateDate;
 	private List<Long> myOrders = new ArrayList<>();
 	private List<Long> myCart = new ArrayList<>();
 

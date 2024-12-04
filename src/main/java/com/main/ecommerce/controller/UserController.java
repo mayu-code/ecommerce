@@ -14,6 +14,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -30,7 +31,7 @@ public class UserController {
     @Autowired
     private UserServiceImpl userServiceImpl;
 
-    
+    @GetMapping("/cartproducts/{Id}")
     public ResponseEntity<List<Product>> getCartProducts(@PathVariable("Id") long id){
         User user = userServiceImpl.getUserbyid(id);
         List<Product> products = new ArrayList<>();
@@ -42,6 +43,7 @@ public class UserController {
         }
     }
 
+    @GetMapping("/orderedproducts/{id}")
     public ResponseEntity<List<Product>> getOrderedProduct(@PathVariable("id") long id){
         User user = userServiceImpl.getUserbyid(id);
         List<Product> products = new ArrayList<>();
@@ -54,6 +56,7 @@ public class UserController {
         }
     }
 
+    @GetMapping("/updateUser")
     public ResponseEntity<User> updateUser(User user){
         User user1 = new User();
         try{
@@ -65,7 +68,8 @@ public class UserController {
         }
     }
 
-    public ResponseEntity<String> AddCardProduct(@PathVariable("userid") long id , @PathVariable("ProductId") long ProductId){
+    @GetMapping("/addCart/{userid}/{productId}")
+    public ResponseEntity<String> AddCardProduct(@PathVariable("userid") long id , @PathVariable("productId") long ProductId){
 
         User user = userServiceImpl.getUserbyid(id);
         try{
@@ -77,6 +81,7 @@ public class UserController {
         }
     }
 
+    @GetMapping("/ordered/{userid}/{ProductId}")
     public ResponseEntity<String> addOrderedProduct(@PathVariable("userid") long id , @PathVariable("ProductId") long ProductId){
         User user = userServiceImpl.getUserbyid(id);
         try{
@@ -88,6 +93,7 @@ public class UserController {
         }
     }
 
+    @GetMapping("/getUser/{id}")
     public ResponseEntity<User> getUserById(@PathVariable("id") long id){
         try{
             return ResponseEntity.of(Optional.of(userServiceImpl.getUserbyid(id)));
