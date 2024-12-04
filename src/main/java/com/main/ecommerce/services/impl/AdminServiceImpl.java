@@ -21,6 +21,9 @@ public class AdminServiceImpl implements AdminServices{
 
     @Autowired
     private UserServiceImpl userService;
+   
+    @Autowired
+    private ProductServiceImpl productService;
 
     @Override
     public Optional<Admin> getAdminById(long id) {
@@ -33,13 +36,15 @@ public class AdminServiceImpl implements AdminServices{
     }
 
     @Override
-    public Admin addProductWithAdminId(Product product, long adminId) {
+    public Product addProductWithAdminId(Product product, long adminId) {
        
         Admin admin = getAdminById(adminId).get();
 
         admin.getMyProducts().add(product);
 
-        return this.repository.save(admin);
+        this.repository.save(admin);
+
+        return this.productService.AddProduct(product);
 
     }
 
@@ -56,6 +61,11 @@ public class AdminServiceImpl implements AdminServices{
     @Override
     public void deleteUser(long userId) {
         this.userService.deleteUser(userId);
+    }
+
+    @Override
+    public Boolean isExist(long id) {
+        return this.repository.existsById(id);
     }
     
 }

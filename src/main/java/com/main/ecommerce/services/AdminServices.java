@@ -12,11 +12,13 @@ import com.main.ecommerce.services.impl.UserServiceImpl;
 
 public interface AdminServices {
 
+    Boolean isExist(long id);
+
     Optional<Admin> getAdminById(long id);
 
     Optional<List<Product>> getAllProductsByAdmin(Admin Admin);
 
-    Admin addProductWithAdminId(Product product, long adminId);
+    Product addProductWithAdminId(Product product, long adminId);
 
     List<User> getAllUsers();
 
@@ -24,5 +26,7 @@ public interface AdminServices {
 
     void deleteUser(long userId);
 
-    
+
+
+
 }
