@@ -11,4 +11,7 @@ public interface AdminServices {
     Optional<Admin> getAdminById(long id);
 
     Optional<List<Product>> getAllProductsByAdmin(Admin Admin);
+
+    Admin addProductWithAdmin(Product product, long adminId);
+
 }

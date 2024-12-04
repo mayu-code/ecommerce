@@ -24,5 +24,18 @@ public class AdminServiceImpl implements AdminServices{
     public Optional<List<Product>> getAllProductsByAdmin(Admin Admin) {
         return this.repository.findProductsByAdmin(Admin);
     }
+
+    @Override
+    public Admin addProductWithAdmin(Product product, long adminId) {
+       
+        Admin admin = getAdminById(adminId).get();
+
+        admin.getMyProducts().add(product);
+
+        return this.repository.save(admin);
+
+        
+
+    }
     
 }

@@ -19,7 +19,7 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Admin {
+public class Admin{
     
     private long id;
     private String userName;
