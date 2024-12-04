@@ -40,14 +40,23 @@ public class UserServiceImpl implements UserServices{
         else{
             user1.getMyCart().add(id);
         }
+        reposotory.save(user1);
        
         return productReposotory.findById(id).get();
        
     }
 
     @Override
-    public String addOrder(User user, long id) {
-        User
+    public Product addOrder(User user, long id) {
+        User user1 = reposotory.findById(user.getId()).get();
+        if(user1.getMyOrders().contains(id)){
+            user1.getMyOrders().remove(id)
+        }else{
+            user1.getMyOrders().add(id);
+        }
+        reposotory.save(user1);
+
+        return productReposotory.findById(id).get();
     }
     
 }
