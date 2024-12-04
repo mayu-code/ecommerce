@@ -1,6 +1,6 @@
 package com.main.ecommerce.services;
 
-public class UserServices {
-    
+public interface UserServices {
+
     
 }

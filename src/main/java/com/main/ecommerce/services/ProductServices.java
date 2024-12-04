@@ -1,5 +1,6 @@
 package com.main.ecommerce.services;
 
-public class  ProductServices  {
+public interface ProductServices {
+
     
 }
