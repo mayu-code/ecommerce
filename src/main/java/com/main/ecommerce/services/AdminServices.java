@@ -24,5 +24,5 @@ public interface AdminServices {
 
     void deleteUser(long userId);
 
-
+    
 }
