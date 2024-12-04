@@ -18,5 +18,7 @@ public interface ProductServices {
 
     public Product AddProduct(Product product);
 
+    public List<Product> getProductsByIds(List<Long> list);
+
     
 }

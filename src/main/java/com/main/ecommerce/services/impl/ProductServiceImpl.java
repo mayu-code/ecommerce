@@ -1,5 +1,6 @@
 package com.main.ecommerce.services.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +47,15 @@ public class ProductServiceImpl implements ProductServices{
     public Product AddProduct(Product product) {
         Product product2 = productReposotory.save(product);
         return product2;   
+    }
+
+    @Override
+    public List<Product> getProductsByIds(List<Long> list) {
+        List<Product> products = new ArrayList<>();
+        for(long id : list){
+            products.add(productReposotory.findById(id).get());
+        }
+        return products;
     }
     
 }

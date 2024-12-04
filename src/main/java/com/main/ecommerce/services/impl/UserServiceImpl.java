@@ -50,7 +50,7 @@ public class UserServiceImpl implements UserServices{
     public Product addOrder(User user, long id) {
         User user1 = reposotory.findById(user.getId()).get();
         if(user1.getMyOrders().contains(id)){
-            user1.getMyOrders().remove(id)
+            user1.getMyOrders().remove(id);
         }else{
             user1.getMyOrders().add(id);
         }
