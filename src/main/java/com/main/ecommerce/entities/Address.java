@@ -3,6 +3,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,7 +14,7 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Adrress {
+public class Address {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -22,6 +23,9 @@ public class Adrress {
 	private String state;
 	private String city;
 	private int pinCode;
+
+	@OneToOne
+	private User user;
 	
 
 }
