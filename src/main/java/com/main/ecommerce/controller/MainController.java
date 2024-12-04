@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class MainController {
 
     @Autowired
-    ProductServiceImpl productServiceImpl;
+    private ProductServiceImpl productServiceImpl;
 
     
     public ResponseEntity<List<Product>> allProducts1(){
