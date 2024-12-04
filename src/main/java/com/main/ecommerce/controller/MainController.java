@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.main.ecommerce.entities.Product;
@@ -18,13 +17,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 
 @RestController
-@RequestMapping("/Home")
 public class MainController {
 
     @Autowired
     private ProductServiceImpl productServiceImpl;
 
-    
+    @GetMapping("/allProduct")
     public ResponseEntity<List<Product>> allProducts1(){
         List<Product> products = new ArrayList<>();
         try{
@@ -36,7 +34,7 @@ public class MainController {
         }
     }
 
-    @GetMapping("getProductByCategery/{categery}")
+    @GetMapping("/getProductByCategery/{categery}")
     public ResponseEntity<List<Product>> allProductsbyCategery(@PathVariable("categery") String categery){
         List<Product> products = new ArrayList<>();
         try{
@@ -48,7 +46,7 @@ public class MainController {
         }
     }
 
-    @GetMapping("getProductBySubCategery/{subcategery}")
+    @GetMapping("/getProductBySubCategery/{subcategery}")
     public ResponseEntity<List<Product>> allProductsbySubCategery(@PathVariable("Subcategery") String subcategery){
         List<Product> products = new ArrayList<>();
         try{
