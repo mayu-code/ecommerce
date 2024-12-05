@@ -59,7 +59,7 @@ public class MainController {
     }
    
     @GetMapping("/getProductByCategoryOrSubCategory/{categery}/{subcategory}")
-    public ResponseEntity<List<Product>> allProductsbySubCategery(@PathVariable("category") String category, @PathVariable("subcategery") String subcategery){
+    public ResponseEntity<List<Product>> allProductsbyCategoryOrSubcategory(@PathVariable("category") String category, @PathVariable("subcategery") String subcategery){
         List<Product> products = new ArrayList<>();
         try{
             products = productServiceImpl.getProductsByCategoryOrSubcategory(category, subcategery);
@@ -71,10 +71,10 @@ public class MainController {
     }
     
     @GetMapping("/getProductByCategoryAndSubCategory/{categery}/{subcategory}")
-    public ResponseEntity<List<Product>> allProductsbySubCategery(@PathVariable("category") String category, @PathVariable("subcategery") String subcategery){
+    public ResponseEntity<List<Product>> allProductsbyCategoryAndSubCategery(@PathVariable("category") String category, @PathVariable("subcategery") String subcategery){
         List<Product> products = new ArrayList<>();
         try{
-            products = productServiceImpl.getProductsByCategoryOrSubcategory(category, subcategery);
+            products = productServiceImpl.getProductsByCategoryAndSubcategory(category, subcategery);
             return ResponseEntity.of(Optional.of(products));
 
         }catch(Exception e){
