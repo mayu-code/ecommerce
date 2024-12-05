@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -35,10 +34,11 @@ public class AdminController {
     @Autowired
     private UserServiceImpl userService;
 
-    @PostMapping("/addProduct/{adminId}")
+    @PostMapping("/addProduct")
     public ResponseEntity<?> addProduct(@RequestHeader("Authorization") String jwt,@RequestBody Product product){
         Admin admin = this.adminService.getAdminByJwt(jwt);
         this.adminService.addProductWithAdminId(product,admin.getId());
+        // this.productService.AddProduct(product);
 
         return new ResponseEntity<>("Product Added Successfully !!",HttpStatus.CREATED);
 
