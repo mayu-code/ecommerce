@@ -1,5 +1,7 @@
 package com.main.ecommerce.entities;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import jakarta.persistence.Entity;
@@ -30,8 +32,8 @@ public class Product {
 	private String subcategory;
 	private String features;
 	private String imgUrl;
-	private Date addedDate;
-	private Date deletedDate;
+	private LocalDateTime addedDate;
+	private LocalDateTime deletedDate;
 	private boolean isEnable;
 
 	@ManyToOne

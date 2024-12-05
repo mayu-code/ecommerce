@@ -1,5 +1,8 @@
 package com.main.ecommerce.controller;
 
+import java.time.LocalDateTime;
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.http.HttpStatus;
@@ -52,6 +55,7 @@ public class AuthController {
 		}
 
         u = user;
+        u.setRegistationDate(LocalDateTime.now());
         this.userService.registerUser(u);
         Authentication authentication = new UsernamePasswordAuthenticationToken(u.getEmail(), u.getPassword());
         String jwtToken = jwtProvider.generateToken(authentication);
@@ -61,7 +65,9 @@ public class AuthController {
 
 	@PostMapping("/user/login")
 	public ResponseEntity<String> signin(@RequestBody  LoginUser user){
-		Authentication authentication = userAuthenticate(user.getEmail(),user.getPassword());
+        User loginUser = this.userService.getByEmail(user.getEmail());
+        loginUser.setLoginDate(LocalDateTime.now());
+		Authentication authentication = userAuthenticate(loginUser.getEmail(),loginUser.getPassword());
 		String token = jwtProvider.generateToken(authentication);
 		// AuthResponse authResponse = new AuthResponse(token,"user login successfully ");
 		return new ResponseEntity<>(token,HttpStatus.OK);

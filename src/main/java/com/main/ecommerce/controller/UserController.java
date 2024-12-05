@@ -7,6 +7,7 @@ import com.main.ecommerce.entities.User;
 import com.main.ecommerce.services.impl.ProductServiceImpl;
 import com.main.ecommerce.services.impl.UserServiceImpl;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -61,7 +62,12 @@ public class UserController {
     @PostMapping("/updateUser")
     public ResponseEntity<User> updateUser(@RequestHeader("Authorization") String jwt ,User user){
         User user1 = this.userServiceImpl.getUserByJwt(jwt);
-        user1 = user;
+        user1.setEmail(user.getEmail());
+        user1.setAddress(user.getAddress());
+        user1.setMobileNo(user.getMobileNo());
+        user1.setName(user.getName());
+        user1.setPassword(user.getPassword());
+        user1.setUpdateDate(LocalDateTime.now());
         try{
             this.userServiceImpl.registerUser(user1);
             return ResponseEntity.of(Optional.of(user1));
