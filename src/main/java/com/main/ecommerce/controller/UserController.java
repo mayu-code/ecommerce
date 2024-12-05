@@ -4,7 +4,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.main.ecommerce.entities.Product;
 import com.main.ecommerce.entities.User;
-import com.main.ecommerce.jwtSecurity.jwtProvider;
 import com.main.ecommerce.services.impl.ProductServiceImpl;
 import com.main.ecommerce.services.impl.UserServiceImpl;
 
@@ -35,9 +34,9 @@ public class UserController {
     @Autowired
     private UserServiceImpl userServiceImpl;
 
-    @GetMapping("/cartproducts/{Id}")
-    public ResponseEntity<List<Product>> getCartProducts(@PathVariable("Id") long id){
-        User user = userServiceImpl.getUserbyid(id);
+    @GetMapping("/cartproducts")
+    public ResponseEntity<List<Product>> getCartProducts(@RequestHeader("Authorization") String jwt){
+        User user = userServiceImpl.getUserByJwt(jwt);
         List<Product> products = new ArrayList<>();
         try{
             products = productServiceImpl.getProductsByIds(user.getMyCart());
@@ -47,9 +46,9 @@ public class UserController {
         }
     }
 
-    @GetMapping("/orderedproducts/{id}")
-    public ResponseEntity<List<Product>> getOrderedProduct(@PathVariable("id") long id){
-        User user = userServiceImpl.getUserbyid(id);
+    @GetMapping("/orderedproducts")
+    public ResponseEntity<List<Product>> getOrderedProduct(@RequestHeader("Authorization") String jwt){
+        User user = userServiceImpl.getUserByJwt(jwt);
         List<Product> products = new ArrayList<>();
         try{
             products = productServiceImpl.getProductsByIds(user.getMyOrders());
@@ -78,10 +77,10 @@ public class UserController {
         }
     }
 
-    @GetMapping("/addCart/{userid}/{productId}")
-    public ResponseEntity<String> AddCardProduct(@PathVariable("userid") long id , @PathVariable("productId") long ProductId){
+    @GetMapping("/addCart/{productId}")
+    public ResponseEntity<String> AddCardProduct(@RequestHeader("Authorization") String jwt, @PathVariable("productId") long ProductId){
 
-        User user = userServiceImpl.getUserbyid(id);
+        User user = this.userServiceImpl.getUserByJwt(jwt);
         try{
             userServiceImpl.addCart(user, ProductId);
             return ResponseEntity.of(Optional.of("Product added onto the cart succesfully ! "));
@@ -91,9 +90,9 @@ public class UserController {
         }
     }
 
-    @GetMapping("/ordered/{userid}/{ProductId}")
-    public ResponseEntity<String> addOrderedProduct(@PathVariable("userid") long id , @PathVariable("ProductId") long ProductId){
-        User user = userServiceImpl.getUserbyid(id);
+    @GetMapping("/ordered/{ProductId}")
+    public ResponseEntity<String> addOrderedProduct(@RequestHeader("Authorization") String jwt, @PathVariable("ProductId") long ProductId){
+        User user = this.userServiceImpl.getUserByJwt(jwt);
         try{
             userServiceImpl.addOrder(user, ProductId);
             return ResponseEntity.of(Optional.of("Product Ordered succesfully ! "));
