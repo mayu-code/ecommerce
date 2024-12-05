@@ -5,6 +5,9 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,26 +34,42 @@ public class AuthController {
     //user registration
 
     @PostMapping("/user/register")
-    public ResponseEntity<?> userRegistration(@RequestBody User user){
-
-        if (user!=null) {
-
-            this.userService.registerUser(user);
-
-            return new ResponseEntity<>("User Registered Successfully !",HttpStatus.CREATED);
+	public ResponseEntity<User> createUser(@RequestBody User user) throws Exception{
+		User u = null;
+        User isExit = this.userService.getByEmail(user.getEmail());
+		// User isExit = this.userRepository.findByEmail(user.getEmail());
+		
+		if(isExit!=null) {
+			throw new Exception("user is already exits ");
+		}
+			u = user;
             
-        }
-        
-        return new ResponseEntity<>("User Not Found !",HttpStatus.INTERNAL_SERVER_ERROR);
-    }
 
-    // user login
+			Authentication authentication = new UsernamePasswordAuthenticationToken(u.getEmail(), u.getPassword());
+			String jwtToken = JwtProvider.generateToken(authentication);
+			AuthResponse authResponse = new AuthResponse(jwtToken,"user register successfully ");
+			return authResponse;
+	}
+	@PostMapping("/user/login")
+	public AuthResponse signin(@RequestBody  LoginUser user){
+		Authentication authentication = authenticate(user.getEmail(),user.getPassword());
+		String token = JwtProvider.generateToken(authentication);
+		AuthResponse authResponse = new AuthResponse(token,"user login successfully ");
+		return authResponse;
+	}
+	
+	private Authentication authenticate(String email,String password) {
+		UserDetails details = detailService.loadUserByUsername(email);
+		
+		if(details ==null) {
+			throw new BadCredentialsException("invalid user");
+		}
+		if(!passwordEncoder.matches(password, details.getPassword())) {
+			throw new BadCredentialsException("password not match");
+		}
+		
+		return new UsernamePasswordAuthenticationToken(details, null,details.getAuthorities());
+	}
 
-    @PostMapping("/user/login")
-    public ResponseEntity<User> userLogin(@RequestBody LoginUser user){
-
-        return ResponseEntity.ok(new User());
-
-    }
 
 }
