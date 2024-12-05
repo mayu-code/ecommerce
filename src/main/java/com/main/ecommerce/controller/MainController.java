@@ -74,7 +74,7 @@ public class MainController {
     public ResponseEntity<List<Product>> allProductsbySubCategery(@PathVariable("category") String category, @PathVariable("subcategery") String subcategery){
         List<Product> products = new ArrayList<>();
         try{
-            products = productServiceImpl.getProductsByCategoryAndSubcategory(category, subcategery);
+            products = productServiceImpl.getProductsByCategoryOrSubcategory(category, subcategery);
             return ResponseEntity.of(Optional.of(products));
 
         }catch(Exception e){
