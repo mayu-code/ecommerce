@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.main.ecommerce.entities.Admin;
 import com.main.ecommerce.entities.Product;
 import com.main.ecommerce.entities.User;
+import com.main.ecommerce.jwtSecurity.jwtProvider;
 import com.main.ecommerce.repository.AdminRepository;
 import com.main.ecommerce.services.AdminServices;
 
@@ -84,6 +85,13 @@ public class AdminServiceImpl implements AdminServices{
 
         return savedAdmin;
 
+    }
+
+    @Override
+    public Admin getAdminByJwt(String jwt) {
+        String email = jwtProvider.getEmailFromJwtToken(jwt);
+        Admin admin = this.repository.findByEmail(email);
+        return admin;
     }
     
 }

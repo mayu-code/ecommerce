@@ -24,5 +24,5 @@ public interface ProductServices {
 
     List<Product> getProductsByCategoryOrSubcategory(String category, String subcategory);
 
-    List<Item> getProductsByCategoryAndSubcategory(String category, String subcategory);
+    List<Product> getProductsByCategoryAndSubcategory(String category, String subcategory);
 }

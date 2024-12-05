@@ -30,4 +30,6 @@ public interface AdminServices {
 
     Admin saveAdmin(Admin admin);
 
+    Admin getAdminByJwt(String jwt);
+
 }

@@ -66,7 +66,7 @@ public class ProductServiceImpl implements ProductServices{
     }
 
     @Override
-    public List<Item> getProductsByCategoryAndSubcategory(String category, String subcategory) {
+    public List<Product> getProductsByCategoryAndSubcategory(String category, String subcategory) {
         return this.productReposotory.findByCategoryAndSubcategory(category, subcategory);
     }
     
