@@ -28,5 +28,6 @@ public interface AdminServices {
 
     Admin getByEmail(String email);
 
+    Admin saveAdmin(Admin admin);
 
 }

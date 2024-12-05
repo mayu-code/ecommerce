@@ -2,6 +2,7 @@ package com.main.ecommerce.entities;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -41,6 +42,7 @@ public class User implements UserDetails{
 	private Date updateDate;
 	private List<Long> myOrders = new ArrayList<>();
 	private List<Long> myCart = new ArrayList<>();
+	
 
 	@JsonIgnore
 	@OneToOne(mappedBy = "user")
@@ -49,6 +51,7 @@ public class User implements UserDetails{
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return List.of(new SimpleGrantedAuthority("user"));
+		// return authorities;
 	}
 
 	@Override

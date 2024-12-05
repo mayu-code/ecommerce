@@ -1,6 +1,10 @@
 package com.main.ecommerce.jwtSecurity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -24,7 +28,9 @@ public class CustomUserDetailsService implements UserDetailsService{
             throw new UsernameNotFoundException("User Not Found !");
         }
 
-        return org.springframework.security.core.userdetails.User.builder().username(user.getEmail()).password(user.getPassword()).roles("user").build();
+        // List<GrantedAuthority> authorities = new ArrayList<>();
+
+        return org.springframework.security.core.userdetails.User.builder().username(user.getEmail()).password(user.getPassword()).authorities(user.getAuthorities()).build();
 
     }
     

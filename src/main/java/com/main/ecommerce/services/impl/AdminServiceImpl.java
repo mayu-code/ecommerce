@@ -72,5 +72,14 @@ public class AdminServiceImpl implements AdminServices{
     public Admin getByEmail(String email) {
         return this.getByEmail(email);
     }
+
+    @Override
+    public Admin saveAdmin(Admin admin) {
+        
+        Admin savedAdmin = this.repository.save(admin);
+
+        return savedAdmin;
+
+    }
     
 }

@@ -25,7 +25,7 @@ public class CustomAdminDetailsService implements UserDetailsService{
             throw new UsernameNotFoundException("Invalid Credenitials !");
         }
 
-        return User.builder().username(admin.getEmail()).password(admin.getPassword()).roles(admin.getRole()).build();
+        return User.builder().username(admin.getEmail()).password(admin.getPassword()).roles(admin.getRole()).authorities(admin.getAuthorities()).build();
 
     }
     
