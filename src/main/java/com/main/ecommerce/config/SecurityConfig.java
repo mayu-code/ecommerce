@@ -29,12 +29,6 @@ public class SecurityConfig {
 
     // Admin security
 
-    @Autowired
-    private CustomAdminDetailsService adminDetailsService;
-
-    @Autowired
-    private CustomUserDetailsService userDetailsService;
-
     @Bean
     @Order(1)
     public SecurityFilterChain adminSecurityFilterChain(HttpSecurity http) throws Exception {
