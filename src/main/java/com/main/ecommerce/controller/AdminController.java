@@ -34,10 +34,11 @@ public class AdminController {
     @Autowired
     private UserServiceImpl userService;
 
-    @PostMapping("/addProduct/{adminId}")
+    @PostMapping("/addProduct")
     public ResponseEntity<?> addProduct(@RequestHeader("Authorization") String jwt,@RequestBody Product product){
         Admin admin = this.adminService.getAdminByJwt(jwt);
         this.adminService.addProductWithAdminId(product,admin.getId());
+        // this.productService.AddProduct(product);
 
         return new ResponseEntity<>("Product Added Successfully !!",HttpStatus.CREATED);
 

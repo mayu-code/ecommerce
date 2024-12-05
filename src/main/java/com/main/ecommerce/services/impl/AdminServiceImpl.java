@@ -44,7 +44,7 @@ public class AdminServiceImpl implements AdminServices{
 
         product.setAddedDate(LocalDateTime.now());
         product.setEnable(true);
-
+        product.setAdmin(admin);
         admin.getMyProducts().add(product);
 
         this.repository.save(admin);
