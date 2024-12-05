@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.main.ecommerce.entities.Product;
 import com.main.ecommerce.entities.User;
+import com.main.ecommerce.jwtSecurity.jwtProvider;
 import com.main.ecommerce.services.impl.ProductServiceImpl;
 import com.main.ecommerce.services.impl.UserServiceImpl;
 
@@ -16,6 +17,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 
@@ -56,15 +59,16 @@ public class UserController {
         }
     }
 
-    @GetMapping("/updateUser")
-    public ResponseEntity<User> updateUser(User user){
-        User user1 = new User();
+    @PostMapping("/updateUser")
+    public ResponseEntity<User> updateUser(@RequestHeader("Authorization") String jwt ,User user){
+        User user1 = this.userServiceImpl.getUserByJwt(jwt);
+        user1 = user;
         try{
-            user1 = userServiceImpl.updateUser(user1);
+            this.userServiceImpl.registerUser(user1);
             return ResponseEntity.of(Optional.of(user1));
         }
         catch(Exception e){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
@@ -93,10 +97,10 @@ public class UserController {
         }
     }
 
-    @GetMapping("/getUser/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable("id") long id){
+    @GetMapping("/getUser")
+    public ResponseEntity<User> getUserById(@RequestHeader("Authorization") String jwt){
         try{
-            return ResponseEntity.of(Optional.of(userServiceImpl.getUserbyid(id)));
+            return ResponseEntity.of(Optional.of(this.userServiceImpl.getUserByJwt(jwt)));
         }
         catch(Exception e){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();

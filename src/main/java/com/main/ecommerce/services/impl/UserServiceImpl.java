@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.main.ecommerce.entities.Product;
 import com.main.ecommerce.entities.User;
+import com.main.ecommerce.jwtSecurity.jwtProvider;
 import com.main.ecommerce.repository.ProductReposotory;
 import com.main.ecommerce.repository.UserReposotory;
 import com.main.ecommerce.services.UserServices;
@@ -80,6 +81,13 @@ public class UserServiceImpl implements UserServices{
     @Override
     public User getByEmail(String email) {
        return this.reposotory.findByEmail(email);
+    }
+
+    @Override
+    public User getUserByJwt(String jwt) {
+        String email = jwtProvider.getEmailFromJwtToken(jwt);
+        User user = this.reposotory.findByEmail(email);
+        return user;
     }
     
 }

@@ -15,4 +15,5 @@ public interface UserServices {
     public void deleteUser(long id);
     public List<User> getAllUsers();
     User getByEmail(String email);
+    User getUserByJwt(String jwt);
 }
