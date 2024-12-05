@@ -32,9 +32,11 @@ public class SecurityConfig {
     @Bean
     @Order(1)
     public SecurityFilterChain adminSecurityFilterChain(HttpSecurity http) throws Exception {
-        http.sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        http.securityMatcher("/admin/**")
+                .sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(Authorize -> Authorize.requestMatchers("/admin/**").authenticated()
-                        .anyRequest().permitAll())
+                        .anyRequest()
+                        .permitAll())
                 .addFilterBefore(new JwtValidater(), BasicAuthenticationFilter.class)
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()));
@@ -77,9 +79,9 @@ public class SecurityConfig {
     @Bean
     @Order(2)
     public SecurityFilterChain userSecurityFilterChain(HttpSecurity http) throws Exception {
-        http.sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(Authorize -> Authorize.requestMatchers("/user/**").authenticated()
-                        .anyRequest().permitAll())
+        http.securityMatcher("/user/**")
+                .sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(Authorize -> Authorize.anyRequest().authenticated())
                 .addFilterBefore(new JwtValidater(), BasicAuthenticationFilter.class)
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()));
@@ -88,10 +90,10 @@ public class SecurityConfig {
 
     // @Bean
     // public AuthenticationProvider userAuthenticationProvider() {
-    //     DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-    //     provider.setUserDetailsService(userDetailsService);
-    //     provider.setPasswordEncoder(userPasswordEncoder());
-    //     return provider;
+    // DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+    // provider.setUserDetailsService(userDetailsService);
+    // provider.setPasswordEncoder(userPasswordEncoder());
+    // return provider;
     // }
 
 }
