@@ -1,5 +1,6 @@
 package com.main.ecommerce.entities;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -35,11 +36,9 @@ public class User implements UserDetails{
 	private String email;
 	private String mobileNo;
 	private String password;
-	private boolean isActive ;
-	private boolean isDeleted ;
-	private Date registationDate;
-	private Date loginDate;
-	private Date updateDate;
+	private LocalDateTime registationDate;
+	private LocalDateTime loginDate;
+	private LocalDateTime updateDate; 
 	private List<Long> myOrders = new ArrayList<>();
 	private List<Long> myCart = new ArrayList<>();
 	

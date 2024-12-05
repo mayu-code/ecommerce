@@ -1,5 +1,6 @@
 package com.main.ecommerce.services.impl;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -39,6 +40,9 @@ public class AdminServiceImpl implements AdminServices{
     public Product addProductWithAdminId(Product product, long adminId) {
        
         Admin admin = getAdminById(adminId).get();
+
+        product.setAddedDate(LocalDateTime.now());
+        product.setEnable(true);
 
         admin.getMyProducts().add(product);
 
