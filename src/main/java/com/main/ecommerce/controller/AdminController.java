@@ -1,5 +1,6 @@
 package com.main.ecommerce.controller;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,36 +45,34 @@ public class AdminController {
     }
 
 
-    @GetMapping("/products/{adminId}")
-    public ResponseEntity<List<Product>> getProducts(@PathVariable long adminId){
+    @GetMapping("/products")
+    public ResponseEntity<List<Product>> getProducts(@RequestHeader("Authorization") String jwt){
 
         List<Product> products = new ArrayList<>();
 
-        if(this.adminService.isExist(adminId)){
-
-            Admin admin = this.adminService.getAdminById(adminId).get();
-    
+        try{
+            Admin admin = this.adminService.getAdminByJwt(jwt);
             List<Product> productsbyAdmin = this.adminService.getAllProductsByAdmin(admin).get();
-
             return new ResponseEntity<>(productsbyAdmin,HttpStatus.OK);
-
+        }catch(Exception e){
+            return new ResponseEntity<>(products,HttpStatus.OK);
         }
 
-        return new ResponseEntity<>(products,HttpStatus.OK);
+
 
     }
 
 
     @PostMapping("/products/update")
-    public ResponseEntity<Product> updateProduct(@RequestBody Product product){
+    public ResponseEntity<Product> updateProduct(@RequestHeader("Authorization") String jwt,@RequestBody Product product){
         Product updatedProduct = this.productService.AddProduct(product);
-
         return new ResponseEntity<>(updatedProduct,HttpStatus.OK);
     }
 
 
     @PostMapping("/users/updateUser")
-    public ResponseEntity<?> updateUser(@RequestBody User user){
+    public ResponseEntity<?> updateUser(@RequestHeader("Authorization") String jwt,@RequestBody User user){
+        user.setUpdateDate(LocalDateTime.now());
         this.adminService.updateUser(user);
 
         return new ResponseEntity<>("User Updated Successfully !",HttpStatus.OK);
@@ -88,7 +87,7 @@ public class AdminController {
     // }
 
     @GetMapping("/allUsers")
-    public ResponseEntity<List<User>> getAllUsers(){
+    public ResponseEntity<List<User>> getAllUsers(@RequestHeader("Authorization") String jwt){
         List<User> allUsers = this.userService.getAllUsers();
         return ResponseEntity.ok(allUsers);
     }
