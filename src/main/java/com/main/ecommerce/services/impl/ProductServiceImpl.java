@@ -3,6 +3,7 @@ package com.main.ecommerce.services.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.cache.spi.support.AbstractReadWriteAccess.Item;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -57,6 +58,16 @@ public class ProductServiceImpl implements ProductServices{
             products.add(productReposotory.findById(id).get());
         }
         return products;
+    }
+
+    @Override
+    public List<Product> getProductsByCategoryOrSubcategory(String category, String subcategory) {
+        return this.productReposotory.findByCategoryOrSubcategory(category, subcategory);
+    }
+
+    @Override
+    public List<Item> getProductsByCategoryAndSubcategory(String category, String subcategory) {
+        return this.productReposotory.findByCategoryAndSubcategory(category, subcategory);
     }
     
 }

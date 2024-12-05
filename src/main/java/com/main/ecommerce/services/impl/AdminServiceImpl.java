@@ -70,7 +70,7 @@ public class AdminServiceImpl implements AdminServices{
 
     @Override
     public Admin getByEmail(String email) {
-        return this.getByEmail(email);
+        return this.repository.findByEmail(email);
     }
 
     @Override

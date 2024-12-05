@@ -2,6 +2,8 @@ package com.main.ecommerce.services;
 
 import java.util.List;
 
+import org.hibernate.cache.spi.support.AbstractReadWriteAccess.Item;
+
 import com.main.ecommerce.entities.Product;
 
 public interface ProductServices {
@@ -20,5 +22,7 @@ public interface ProductServices {
 
     public List<Product> getProductsByIds(List<Long> list);
 
-    
+    List<Product> getProductsByCategoryOrSubcategory(String category, String subcategory);
+
+    List<Item> getProductsByCategoryAndSubcategory(String category, String subcategory);
 }
