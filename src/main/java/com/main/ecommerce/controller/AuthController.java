@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.main.ecommerce.ResponseEntity.AuthResponse;
 import com.main.ecommerce.entities.Admin;
 import com.main.ecommerce.entities.LoginAdmin;
 import com.main.ecommerce.entities.LoginUser;
@@ -47,32 +48,37 @@ public class AuthController {
     //user registration
 
     @PostMapping("/user/register")
-	public ResponseEntity<String> createUser(@RequestBody User user) throws Exception{
+	public AuthResponse createUser(@RequestBody User user) throws Exception{
 		User u = null;
+		AuthResponse auth = new AuthResponse();
         User isExit = this.userService.getByEmail(user.getEmail());
-		// User isExit = this.userRepository.findByEmail(user.getEmail());
 		
 		if(isExit!=null) {
 			throw new Exception("user is already exits ");
 		}
-
         u = user;
         u.setRegistationDate(LocalDateTime.now());
         this.userService.registerUser(u);
         Authentication authentication = new UsernamePasswordAuthenticationToken(u.getEmail(), u.getPassword());
         String jwtToken = jwtProvider.generateToken(authentication);
-        // AuthResponse authResponse = new AuthResponse(jwtToken,"user register successfully ");
-        return new ResponseEntity<>(jwtToken,HttpStatus.OK);
+		auth.setToken(jwtToken);
+		auth.setStatus(HttpStatus.OK);
+		auth.setMessage("User register succusfull");
+        
+        return auth;
 	}
 
 	@PostMapping("/user/login")
-	public ResponseEntity<String> signin(@RequestBody  LoginUser user){
+	public AuthResponse signin(@RequestBody  LoginUser user){
+		AuthResponse auth = new AuthResponse();
         User loginUser = this.userService.getByEmail(user.getEmail());
         loginUser.setLoginDate(LocalDateTime.now());
 		Authentication authentication = userAuthenticate(loginUser.getEmail(),loginUser.getPassword());
 		String token = jwtProvider.generateToken(authentication);
-		// AuthResponse authResponse = new AuthResponse(token,"user login successfully ");
-		return new ResponseEntity<>(token,HttpStatus.OK);
+		auth.setToken(token);
+		auth.setStatus(HttpStatus.OK);
+		auth.setMessage("User login succussfull");
+		return auth;
 	}
 	
 	private Authentication userAuthenticate(String email,String password) {
@@ -93,11 +99,10 @@ public class AuthController {
     //admin registration
 
     @PostMapping("/admin/register")
-	public ResponseEntity<String> createAdmin(@RequestBody Admin admin) throws Exception{
+	public AuthResponse createAdmin(@RequestBody Admin admin) throws Exception{
 		Admin a = null;
+		AuthResponse auth = new AuthResponse();
         Admin isExit = this.adminService.getByEmail(admin.getEmail());
-		// User isExit = this.userRepository.findByEmail(user.getEmail());
-		
 		if(isExit!=null) {
 			throw new Exception("admin is already exits ");
 		}
@@ -106,16 +111,22 @@ public class AuthController {
         this.adminService.saveAdmin(admin);
         Authentication authentication = new UsernamePasswordAuthenticationToken(a.getEmail(), a.getPassword());
         String jwtToken = jwtProvider.generateToken(authentication);
-        // AuthResponse authResponse = new AuthResponse(jwtToken,"user register successfully ");
-        return new ResponseEntity<>(jwtToken,HttpStatus.OK);
+		auth.setToken(jwtToken);
+		auth.setStatus(HttpStatus.OK);
+		auth.setMessage("Admin register succussfull");
+        return auth;
+
 	}
 
 	@PostMapping("/admin/login")
-	public ResponseEntity<String> adminLogin(@RequestBody  LoginAdmin admin){
+	public AuthResponse adminLogin(@RequestBody  LoginAdmin admin){
+		AuthResponse auth = new AuthResponse();
 		Authentication authentication = adminAuthenticate(admin.getEmail(),admin.getPassword());
 		String token = jwtProvider.generateToken(authentication);
-		// AuthResponse authResponse = new AuthResponse(token,"user login successfully ");
-		return new ResponseEntity<>(token,HttpStatus.OK);
+		auth.setToken(token);
+		auth.setStatus(HttpStatus.OK);
+		auth.setMessage("Admin login succussfull");
+		return auth;
 	}
 	
 	private Authentication adminAuthenticate(String email,String password) {
@@ -124,9 +135,7 @@ public class AuthController {
 		if(details ==null) {
 			throw new BadCredentialsException("invalid admin");
 		}
-		// if(!passwordEncoder.matches(password, details.getPassword())) {
-		// 	throw new BadCredentialsException("password not match");
-		// }
+
 
         return new UsernamePasswordAuthenticationToken(details, password,details.getAuthorities());
 		
