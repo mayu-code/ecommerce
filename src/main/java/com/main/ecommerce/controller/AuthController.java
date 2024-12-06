@@ -69,6 +69,7 @@ public class AuthController {
 	public ResponseEntity<String> signin(@RequestBody  LoginUser user){
         User loginUser = this.userService.getByEmail(user.getEmail());
         loginUser.setLoginDate(LocalDateTime.now());
+		this.userService.registerUser(loginUser);
 		Authentication authentication = userAuthenticate(loginUser.getEmail(),loginUser.getPassword());
 		String token = jwtProvider.generateToken(authentication);
 		// AuthResponse authResponse = new AuthResponse(token,"user login successfully ");

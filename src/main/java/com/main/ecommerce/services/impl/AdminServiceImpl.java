@@ -49,7 +49,7 @@ public class AdminServiceImpl implements AdminServices{
 
         this.repository.save(admin);
 
-        return this.productService.AddProduct(product);
+        return product;
 
     }
 
