@@ -96,15 +96,6 @@ public class UserController {
             existingUser.setPassword(updatedUser.getPassword());
             existingUser.setUpdateDate(LocalDateTime.now());
     
-            // Handle address update (new address case)
-            if (updatedUser.getAddress() != null) {
-                Address newAddress = updatedUser.getAddress();
-    
-                // Ensure bidirectional relationship
-                newAddress.setUser(existingUser);
-                existingUser.setAddress(newAddress);
-            }
-    
             // Save updated user and new address
             User savedUser = this.userServiceImpl.updateUser(existingUser);
             return ResponseEntity.ok(savedUser);
