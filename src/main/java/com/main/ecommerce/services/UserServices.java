@@ -11,6 +11,7 @@ public interface UserServices {
     public User getUserbyid(long id);
     public User updateUser(User user);
     public Product addCart(User user , long id);
+    public Product removeCart(User user , long id);
     public Product addOrder(User user , long id);
     public void deleteUser(long id);
     public List<User> getAllUsers();

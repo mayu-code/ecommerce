@@ -41,11 +41,10 @@ public class UserServiceImpl implements UserServices{
     public Product addCart(User user, long id) {
        User user1  = reposotory.findById(user.getId()).get();
         if(user1.getMyCart().contains(id)){
-            user1.getMyCart().remove(id);
+            return productReposotory.findById(id).get();
         }
-        else{
             user1.getMyCart().add(id);
-        }
+
         reposotory.save(user1);
        
         return productReposotory.findById(id).get();
@@ -88,6 +87,17 @@ public class UserServiceImpl implements UserServices{
         String email = jwtProvider.getEmailFromJwtToken(jwt);
         User user = this.reposotory.findByEmail(email);
         return user;
+    }
+
+    @Override
+    public Product removeCart(User user, long id) {
+        User user1  = reposotory.findById(user.getId()).get();
+        if(user1.getMyCart().contains(id)){
+            user1.getMyCart().remove(id);
+        }
+        reposotory.save(user1);
+       
+        return productReposotory.findById(id).get();
     }
     
 }

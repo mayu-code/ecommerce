@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -44,8 +45,9 @@ public class User implements UserDetails{
 	
 
 	@JsonIgnore
-	@OneToOne(mappedBy = "user")
-	private Address address;
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private Address address;
+
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -28,7 +28,7 @@ import com.main.ecommerce.services.impl.UserServiceImpl;
 
 @RestController
 @RequestMapping("/auth")
-@CrossOrigin("http://localhost:5174/")
+@CrossOrigin(origins = {"http://localhost:5173/","http://localhost:5174/"})
 public class AuthController {
     
     @Autowired

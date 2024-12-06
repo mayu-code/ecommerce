@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @RestController
 @RequestMapping("/home")
-@CrossOrigin("http://localhost:5174/")
+@CrossOrigin(origins = {"http://localhost:5173/","http://localhost:5174/"})
 public class MainController {
 
     @Autowired

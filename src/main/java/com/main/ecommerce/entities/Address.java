@@ -1,4 +1,5 @@
 package com.main.ecommerce.entities;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -24,8 +25,8 @@ public class Address {
 	private String city;
 	private int pinCode;
 
-	@OneToOne
-	private User user;
+	@OneToOne(cascade = CascadeType.ALL)
+    private User user;
 	
 
 }
