@@ -1,5 +1,7 @@
 package com.main.ecommerce.services.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,6 +37,11 @@ public class AdressServiceImpl implements AdressService{
     @Override
     public void deleteAddressById(long addressId) {
         this.adressReposotory.deleteById(addressId);
+    }
+
+    @Override
+    public List<Address> getAllAddress() {
+        return adressReposotory.findAll();
     }
     
 }

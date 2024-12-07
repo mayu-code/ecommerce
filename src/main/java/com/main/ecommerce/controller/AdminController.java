@@ -13,12 +13,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.main.ecommerce.entities.Admin;
 import com.main.ecommerce.entities.Product;
 import com.main.ecommerce.entities.User;
 import com.main.ecommerce.services.impl.AdminServiceImpl;
+import com.main.ecommerce.services.impl.ImageUploader;
 import com.main.ecommerce.services.impl.ProductServiceImpl;
 import com.main.ecommerce.services.impl.UserServiceImpl;
 
@@ -36,9 +40,14 @@ public class AdminController {
     @Autowired
     private UserServiceImpl userService;
 
+    @Autowired
+    private ImageUploader imageUploader;
+
     @PostMapping("/addProduct")
-    public ResponseEntity<?> addProduct(@RequestHeader("Authorization") String jwt,@RequestBody Product product){
+    public ResponseEntity<?> addProduct(@RequestHeader("Authorization") String jwt,@RequestPart("product") Product product,@RequestParam("image") MultipartFile file){
         Admin admin = this.adminService.getAdminByJwt(jwt);
+        String url = imageUploader.iamgeUploader(file);
+        product.setImgUrl(url);
         this.adminService.addProductWithAdminId(product,admin.getId());
         // this.productService.AddProduct(product);
 
