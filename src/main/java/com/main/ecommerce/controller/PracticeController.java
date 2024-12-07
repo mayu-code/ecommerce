@@ -21,9 +21,4 @@ public class PracticeController {
         return url;
     }
 
-    @GetMapping("ok")
-    public String imageAdder(){
-
-        return "ok";
-    }
 }

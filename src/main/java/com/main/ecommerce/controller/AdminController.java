@@ -51,13 +51,6 @@ public class AdminController {
         String url = imageUploader.iamgeUploader(file);
         product.setImgUrl(url);
         this.adminService.addProductWithAdminId(product,admin.getId());
-=======
-    public ResponseEntity<AuthResponse> addProduct(@RequestHeader("Authorization") String jwt,
-            @RequestBody Product product) {
-        Admin admin = this.adminService.getAdminByJwt(jwt);
-        this.adminService.addProductWithAdminId(product, admin.getId());
-        // this.productService.AddProduct(product);
-
         AuthResponse response = new AuthResponse();
 
         response.setStatus(HttpStatus.CREATED);
