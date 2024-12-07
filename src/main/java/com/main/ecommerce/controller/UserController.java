@@ -159,36 +159,67 @@ public class UserController {
     }
 
     @PostMapping("/removeCart/{productId}")
-    public ResponseEntity<String> removeCardProduct(@RequestHeader("Authorization") String jwt,
+    public ResponseEntity<DataResponse> removeCardProduct(@RequestHeader("Authorization") String jwt,
             @PathVariable("productId") long ProductId) {
 
         User user = this.userServiceImpl.getUserByJwt(jwt);
+
+        DataResponse response = new DataResponse();
+
         try {
             userServiceImpl.removeCart(user, ProductId);
-            return ResponseEntity.of(Optional.of("Product remove from the cart the cart succesfully ! "));
+            response.setStatus(HttpStatus.OK);
+            response.setMessage("Product remove from the cart the cart succesfully ! ");
+
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+            response.setMessage("Product remove from the cart the cart failed ! ");
+
+            return ResponseEntity.ok(response);
         }
     }
 
     @PostMapping("/ordered/{ProductId}")
-    public ResponseEntity<String> addOrderedProduct(@RequestHeader("Authorization") String jwt,
+    public ResponseEntity<DataResponse> addOrderedProduct(@RequestHeader("Authorization") String jwt,
             @PathVariable("ProductId") long ProductId) {
         User user = this.userServiceImpl.getUserByJwt(jwt);
+
+        DataResponse response = new DataResponse();
+
         try {
             userServiceImpl.addOrder(user, ProductId);
-            return ResponseEntity.of(Optional.of("Product Ordered succesfully ! "));
+            response.setStatus(HttpStatus.OK);
+            response.setMessage("Product Orederd succesfully ! ");
+
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+            response.setMessage("Product Orederd failed ! ");
+
+            return ResponseEntity.ok(response);
         }
     }
 
     @GetMapping("/getUser")
-    public ResponseEntity<User> getUserById(@RequestHeader("Authorization") String jwt) {
+    public ResponseEntity<DataResponse> getUserById(@RequestHeader("Authorization") String jwt) {
+
+        DataResponse response = new DataResponse();
+
+        User user = this.userServiceImpl.getUserByJwt(jwt);
+
         try {
-            return ResponseEntity.of(Optional.of(this.userServiceImpl.getUserByJwt(jwt)));
+            response.setStatus(HttpStatus.OK);
+            response.setMessage("User Get succesfully ! ");
+            response.setData(user);
+
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+            response.setMessage("User Get failed ! ");
+            response.setData(user);
+
+            return ResponseEntity.ok(response);
         }
     }
 }
