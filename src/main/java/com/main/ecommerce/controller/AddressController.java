@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.main.ecommerce.ResponseEntity.DataResponse;
 import com.main.ecommerce.entities.Address;
 import com.main.ecommerce.entities.User;
 import com.main.ecommerce.services.impl.AdressServiceImpl;
@@ -31,26 +32,36 @@ public class AddressController {
     @Autowired
     private UserServiceImpl userService;
 
-    @PostMapping("/addAddress")
-    public ResponseEntity<?> addAddressToUser(@RequestHeader("Authorization") String jwt,@RequestBody Address address){
-        User user = userService.getUserByJwt(jwt);
-        Address add = this.adressService.addAddressToUserWithUserId(user.getId(), address);
+    @PostMapping("/add/{userId}")
+    public ResponseEntity<?> addAddressToUser(@PathVariable long userId, @RequestBody Address address) {
+
+        Address add = this.adressService.addAddressToUserWithUserId(userId, address);
+
         return ResponseEntity.of(Optional.of(add));
 
     }
-    
-    @PostMapping("/deleteAddress/{addressId}")
-    public ResponseEntity<?> deleteUser(@RequestHeader("Authorization") String jwt,@PathVariable long addressId){
-        return null;
+
+    @PostMapping("/delete/{addressId}")
+    public ResponseEntity<?> deleteUser(@PathVariable long addressId) {
+
+        this.adressService.deleteAddressById(addressId);
+
+        return new ResponseEntity<>("deleted !", HttpStatus.OK);
+
     }
 
-  
     @GetMapping("/{userId}")
-    public ResponseEntity<List<Address>> getAdressByUserId(@PathVariable long userId) {
+    public ResponseEntity<DataResponse> getAdressByUserId(@PathVariable long userId) {
 
         List<Address> addressByUserId = this.adressService.getAddressByUserId(userId);
 
-        return ResponseEntity.of(Optional.of(addressByUserId));
+        DataResponse response = new DataResponse();
+
+        response.setStatus(HttpStatus.OK);
+        response.setMessage("Address fetched Successfully");
+        response.setData(addressByUserId);
+
+        return ResponseEntity.of(Optional.of(response));
 
     }
 

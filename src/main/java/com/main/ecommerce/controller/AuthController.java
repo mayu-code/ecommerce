@@ -58,8 +58,7 @@ public class AuthController {
 	public ResponseEntity<AuthResponse> createUser(@RequestBody User user) throws Exception {
 		User u = null;
 		AuthResponse auth = new AuthResponse();
-		try{
-			User isExit = this.userService.getByEmail(user.getEmail());
+		User isExit = this.userService.getByEmail(user.getEmail());
 
 		if (isExit != null) {
 			throw new Exception("user is already exits ");
@@ -73,29 +72,20 @@ public class AuthController {
 		auth.setToken(jwtToken);
 		auth.setStatus(HttpStatus.OK);
 		auth.setMessage("User register succusfull");
-		return ResponseEntity.of(Optional.of(auth));
-		}
-		catch(Exception e){
-			auth.setToken(null);
-			auth.setStatus(HttpStatus.BAD_REQUEST);
-			auth.setMessage("register Fail");
-			return ResponseEntity.of(Optional.of(auth));
-		}
 
-		
+		return auth;
 	}
 
 	@PostMapping("/user/login")
 	public ResponseEntity<AuthResponse> signin(@RequestBody LoginUser loginRequest) {
-		AuthResponse auth = new AuthResponse();
+		AuthResponse response = new AuthResponse();
 
 		// Fetch user details by email
 		UserDetails userDetails = userDetailsService.loadUserByUsername(loginRequest.getEmail());
 		if (userDetails == null) {
 			auth.setStatus(HttpStatus.UNAUTHORIZED);
 			auth.setMessage("Invalid email or password");
-			auth.setToken(null);
-			return ResponseEntity.of(Optional.of(auth));
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(auth);
 		}
 
 		// Validate the password
@@ -106,9 +96,8 @@ public class AuthController {
 
 		if (!isPasswordValid) {
 			auth.setStatus(HttpStatus.UNAUTHORIZED);
-			auth.setToken(null);
 			auth.setMessage("Invalid email or password");
-			return ResponseEntity.of(Optional.of(auth));
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(auth);
 		}
 		Authentication authentication = userAuthenticate(userDetails.getUsername(), loginRequest.getPassword());
 
@@ -118,11 +107,11 @@ public class AuthController {
 		this.userService.registerUser(loginUser);
 
 		// Prepare response
-		auth.setToken(token);
-		auth.setStatus(HttpStatus.OK);
-		auth.setMessage("User login successful");
+		response.setToken(token);
+		response.setStatus(HttpStatus.OK);
+		response.setMessage("User login successful");
 
-		return ResponseEntity.of(Optional.of(auth));
+		return ResponseEntity.ok(auth);
 	}
 
 	// authentication for user 
@@ -142,7 +131,7 @@ public class AuthController {
 	@PostMapping("/admin/register")
 	public ResponseEntity<AuthResponse> createAdmin(@RequestBody Admin admin) throws Exception {
 		Admin a = null;
-		AuthResponse auth = new AuthResponse();
+		AuthResponse response = new AuthResponse();
 		Admin isExit = this.adminService.getByEmail(admin.getEmail());
 		if (isExit != null) {
 			throw new Exception("admin is already exits ");
@@ -156,21 +145,20 @@ public class AuthController {
 		auth.setToken(jwtToken);
 		auth.setStatus(HttpStatus.OK);
 		auth.setMessage("Admin register succussfull");
-		return ResponseEntity.of(Optional.of(auth));
+		return auth;
 
 	}
 
 	@PostMapping("/admin/login")
 	public ResponseEntity<AuthResponse> adminLogin(@RequestBody LoginAdmin loginRequest) {
-		AuthResponse auth = new AuthResponse();
+		AuthResponse response = new AuthResponse();
 
 		// Fetch admin details by email
 		UserDetails adminDetails = adminDetailsService.loadUserByUsername(loginRequest.getEmail());
 		if (adminDetails == null) {
 			auth.setStatus(HttpStatus.UNAUTHORIZED);
 			auth.setMessage("Invalid email or password");
-			auth.setToken(null);
-			return ResponseEntity.of(Optional.of(auth));
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(auth);
 		}
 
 		// Validate the password
@@ -182,8 +170,7 @@ public class AuthController {
 		if (!isPasswordValid) {
 			auth.setStatus(HttpStatus.UNAUTHORIZED);
 			auth.setMessage("Invalid email or password");
-			auth.setToken(null);
-			return ResponseEntity.of(Optional.of(auth));
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(auth);
 		}
 
 		// Authenticate the admin
@@ -196,7 +183,8 @@ public class AuthController {
 		auth.setToken(token);
 		auth.setStatus(HttpStatus.OK);
 		auth.setMessage("Admin login successful");
-		return ResponseEntity.of(Optional.of(auth));
+
+		return ResponseEntity.ok(auth);
 	}
 
 	private Authentication adminAuthenticate(String email, String password) {
