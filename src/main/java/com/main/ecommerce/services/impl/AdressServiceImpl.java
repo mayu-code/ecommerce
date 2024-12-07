@@ -23,7 +23,9 @@ public class AdressServiceImpl implements AdressService{
         User user = this.userService.getUserbyid(userId);
 
         user.getAddresses().add(address);
-
+        
+        address.setUser(user);
+        
         this.userService.registerUser(user);
 
         return this.adressReposotory.save(address);

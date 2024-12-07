@@ -12,6 +12,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -44,10 +45,9 @@ public class User implements UserDetails{
 	private LocalDateTime updateDate; 
 	private List<Long> myOrders = new ArrayList<>();
 	private List<Long> myCart = new ArrayList<>();
-	
 
-	@JsonIgnore
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL,orphanRemoval = true,fetch = FetchType.LAZY)
+	@JsonManagedReference
+	@OneToMany(mappedBy = "user",orphanRemoval = true,cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private List<Address> addresses = new ArrayList<>();
 
 

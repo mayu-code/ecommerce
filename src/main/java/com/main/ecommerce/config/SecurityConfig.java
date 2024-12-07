@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -27,7 +28,18 @@ import jakarta.servlet.http.HttpServletRequest;
 @Configuration
 public class SecurityConfig {
 
+    @Autowired
+    private CustomUserDetailsService userDetailsService;
+
+    @Autowired
+    private CustomAdminDetailsService adminDetailsService;
+
     // Admin security
+
+    @Bean
+    public PasswordEncoder adminPasswordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
     @Bean
     @Order(1)
@@ -51,7 +63,7 @@ public class SecurityConfig {
             public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
                 CorsConfiguration cfg = new CorsConfiguration();
                 cfg.setAllowedOrigins(Arrays.asList(
-                        "http://localhost:5173","http://localhost:5174"));
+                        "http://localhost:5173", "http://localhost:5174"));
                 cfg.setAllowedMethods(Collections.singletonList("*"));
                 cfg.setAllowCredentials(true);
                 cfg.setAllowedHeaders(Collections.singletonList("*"));
@@ -62,12 +74,13 @@ public class SecurityConfig {
         };
     }
 
-    // @Bean
-    // public AuthenticationProvider adminAuthenticationProvider() {
-    // DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-    // provider.setUserDetailsService(adminDetailsService);
-    // return provider;
-    // }
+    @Bean
+    public AuthenticationProvider adminAuthenticationProvider() {
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setUserDetailsService(adminDetailsService);
+        provider.setPasswordEncoder(adminPasswordEncoder());
+        return provider;
+    }
 
     // user security
 
@@ -81,20 +94,24 @@ public class SecurityConfig {
     public SecurityFilterChain userSecurityFilterChain(HttpSecurity http) throws Exception {
         http.securityMatcher("/user/**")
                 .sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(Authorize -> Authorize.anyRequest().authenticated())
+                .authorizeHttpRequests(authz -> authz
+                        .requestMatchers(HttpMethod.GET, "/user/**").permitAll()
+                        .anyRequest().authenticated())
                 .addFilterBefore(new JwtValidater(), BasicAuthenticationFilter.class)
                 .csrf(csrf -> csrf.disable())
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()));
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .authenticationProvider(userAuthenticationProvider());
+
         return http.build();
     }
 
-    // @Bean
-    // public AuthenticationProvider userAuthenticationProvider() {
-    // DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-    // provider.setUserDetailsService(userDetailsService);
-    // provider.setPasswordEncoder(userPasswordEncoder());
-    // return provider;
-    // }
+    @Bean
+    public AuthenticationProvider userAuthenticationProvider() {
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setUserDetailsService(userDetailsService); // Ensure this is defined
+        provider.setPasswordEncoder(userPasswordEncoder());
+        return provider;
+    }
 
 }
 
