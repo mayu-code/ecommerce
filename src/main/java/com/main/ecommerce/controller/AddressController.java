@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.main.ecommerce.ResponseEntity.DataResponse;
 import com.main.ecommerce.entities.Address;
 import com.main.ecommerce.entities.User;
 import com.main.ecommerce.services.impl.AdressServiceImpl;
@@ -31,29 +32,45 @@ public class AddressController {
     private UserServiceImpl userService;
 
     @PostMapping("/add/{userId}")
-    public ResponseEntity<?> addAddressToUser(@PathVariable long userId, @RequestBody Address address) {
+    public ResponseEntity<DataResponse> addAddressToUser(@PathVariable long userId, @RequestBody Address address) {
 
         Address add = this.adressService.addAddressToUserWithUserId(userId, address);
 
-        return ResponseEntity.of(Optional.of(add));
+        DataResponse response = new DataResponse();
+
+        response.setStatus(HttpStatus.CREATED);
+        response.setMessage("Address Added Successfully");
+        response.setData(add);
+
+        return ResponseEntity.of(Optional.of(response));
 
     }
 
     @PostMapping("/delete/{addressId}")
-    public ResponseEntity<?> deleteUser(@PathVariable long addressId) {
+    public ResponseEntity<DataResponse> deleteUser(@PathVariable long addressId) {
 
         this.adressService.deleteAddressById(addressId);
 
-        return new ResponseEntity<>("deleted !", HttpStatus.OK);
+        DataResponse response = new DataResponse();
 
+        response.setStatus(HttpStatus.OK);
+        response.setMessage("Address Deleted Successfully");
+
+        return ResponseEntity.of(Optional.of(response));
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<List<Address>> getAdressByUserId(@PathVariable long userId) {
+    public ResponseEntity<DataResponse> getAdressByUserId(@PathVariable long userId) {
 
         List<Address> addressByUserId = this.adressService.getAddressByUserId(userId);
 
-        return ResponseEntity.of(Optional.of(addressByUserId));
+        DataResponse response = new DataResponse();
+
+        response.setStatus(HttpStatus.OK);
+        response.setMessage("Address fetched Successfully");
+        response.setData(addressByUserId);
+
+        return ResponseEntity.of(Optional.of(response));
 
     }
 

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.main.ecommerce.ResponseEntity.AuthResponse;
+import com.main.ecommerce.ResponseEntity.DataResponse;
 import com.main.ecommerce.entities.Admin;
 import com.main.ecommerce.entities.Product;
 import com.main.ecommerce.entities.User;
@@ -55,33 +56,58 @@ public class AdminController {
     }
 
     @GetMapping("/products")
-    public ResponseEntity<List<Product>> getProducts(@RequestHeader("Authorization") String jwt) {
+    public ResponseEntity<DataResponse> getProducts(@RequestHeader("Authorization") String jwt) {
 
         List<Product> products = new ArrayList<>();
+
+        DataResponse response = new DataResponse();
 
         try {
             Admin admin = this.adminService.getAdminByJwt(jwt);
             List<Product> productsbyAdmin = this.adminService.getAllProductsByAdmin(admin).get();
-            return new ResponseEntity<>(productsbyAdmin, HttpStatus.OK);
+
+            response.setStatus(HttpStatus.OK);
+            response.setMessage("Get Products Successfull");
+            response.setData(productsbyAdmin);
+
+            return ResponseEntity.of(Optional.of(response));
         } catch (Exception e) {
-            return new ResponseEntity<>(products, HttpStatus.OK);
+
+            response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+            response.setMessage("Unable To Get Products !");
+            response.setData(products);
+
+            return ResponseEntity.of(Optional.of(response));
+
         }
 
     }
 
     @PostMapping("/products/update")
-    public ResponseEntity<Product> updateProduct(@RequestHeader("Authorization") String jwt,
+    public ResponseEntity<DataResponse> updateProduct(@RequestHeader("Authorization") String jwt,
             @RequestBody Product product) {
         Product updatedProduct = this.productService.AddProduct(product);
-        return new ResponseEntity<>(updatedProduct, HttpStatus.OK);
+
+        DataResponse response = new DataResponse();
+        response.setStatus(HttpStatus.OK);
+        response.setMessage("Product updated Successfully");
+        response.setData(updatedProduct);
+
+        return ResponseEntity.of(Optional.of(response));
     }
 
     @PostMapping("/users/updateUser")
-    public ResponseEntity<?> updateUser(@RequestHeader("Authorization") String jwt, @RequestBody User user) {
+    public ResponseEntity<DataResponse> updateUser(@RequestHeader("Authorization") String jwt, @RequestBody User user) {
         user.setUpdateDate(LocalDateTime.now());
-        this.adminService.updateUser(user);
+        User updatedUser = this.adminService.updateUser(user);
 
-        return new ResponseEntity<>("User Updated Successfully !", HttpStatus.OK);
+        DataResponse response = new DataResponse();
+
+        response.setStatus(HttpStatus.OK);
+        response.setMessage("User Updated Successfully !");
+        response.setData(updatedUser);
+
+        return ResponseEntity.of(Optional.of(response));
     }
 
     // @GetMapping("/products/ordered")
@@ -92,9 +118,16 @@ public class AdminController {
     // }
 
     @GetMapping("/allUsers")
-    public ResponseEntity<List<User>> getAllUsers(@RequestHeader("Authorization") String jwt) {
+    public ResponseEntity<DataResponse> getAllUsers(@RequestHeader("Authorization") String jwt) {
         List<User> allUsers = this.userService.getAllUsers();
-        return ResponseEntity.ok(allUsers);
+
+        DataResponse response = new DataResponse();
+
+        response.setStatus(HttpStatus.OK);
+        response.setMessage("Fetch all users successful");
+        response.setData(allUsers);
+
+        return ResponseEntity.of(Optional.of(response));
     }
 
 }
