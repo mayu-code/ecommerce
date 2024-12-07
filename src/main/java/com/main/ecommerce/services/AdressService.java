@@ -6,10 +6,10 @@ import com.main.ecommerce.entities.Address;
 
 public interface AdressService {
 
-    Address addAddressToUserWithUserId(long userId,Address address);
+    Address addAddressToUserWithUserId(long userId, Address address);
 
     void deleteAddressById(long addressId);
 
-    List<Address> getAllAddress();
-    
-} 
+    List<Address> getAddressByUserId(long userId);
+
+}

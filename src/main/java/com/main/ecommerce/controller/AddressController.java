@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,9 +22,9 @@ import com.main.ecommerce.services.impl.UserServiceImpl;
 
 @RestController
 @RequestMapping("/address")
-@CrossOrigin(origins = {"http://localhost:5173/","http://localhost:5174/"})
+@CrossOrigin(origins = { "http://localhost:5173/", "http://localhost:5174/" })
 public class AddressController {
-    
+
     @Autowired
     private AdressServiceImpl adressService;
 
@@ -41,9 +42,13 @@ public class AddressController {
     @PostMapping("/deleteAddress/{addressId}")
     public ResponseEntity<?> deleteUser(@RequestHeader("Authorization") String jwt,@PathVariable long addressId){
 
-        this.adressService.deleteAddressById(addressId);
+  
+    @GetMapping("/{userId}")
+    public ResponseEntity<List<Address>> getAdressByUserId(@PathVariable long userId) {
 
-        return new ResponseEntity<>("deleted !",HttpStatus.OK);
+        List<Address> addressByUserId = this.adressService.getAddressByUserId(userId);
+
+        return ResponseEntity.of(Optional.of(addressByUserId));
 
     }
 
