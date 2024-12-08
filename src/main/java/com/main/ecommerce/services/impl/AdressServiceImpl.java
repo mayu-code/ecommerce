@@ -27,10 +27,10 @@ public class AdressServiceImpl implements AdressService {
         user.getAddresses().add(address);
 
         address.setUser(user);
-
         this.userService.registerUser(user);
 
-        return this.adressReposotory.save(address);
+
+        return address;
 
     }
 

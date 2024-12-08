@@ -22,7 +22,7 @@ import com.main.ecommerce.services.impl.AdressServiceImpl;
 import com.main.ecommerce.services.impl.UserServiceImpl;
 
 @RestController
-@RequestMapping("/address")
+@RequestMapping("/user")
 @CrossOrigin(origins = { "http://localhost:5173/", "http://localhost:5174/" })
 public class AddressController {
 
@@ -32,17 +32,17 @@ public class AddressController {
     @Autowired
     private UserServiceImpl userService;
 
-    @PostMapping("/add/{userId}")
-    public ResponseEntity<?> addAddressToUser(@PathVariable long userId, @RequestBody Address address) {
-
-        Address add = this.adressService.addAddressToUserWithUserId(userId, address);
+    @PostMapping("/addAddress")
+    public ResponseEntity<?> addAddressToUser(@RequestHeader("Authorization") String jwt, @RequestBody Address address) {
+        User user = userService.getUserByJwt(jwt);
+        Address add = this.adressService.addAddressToUserWithUserId(user.getId(), address);
 
         return ResponseEntity.of(Optional.of(add));
 
     }
 
     @PostMapping("/delete/{addressId}")
-    public ResponseEntity<?> deleteUser(@PathVariable long addressId) {
+    public ResponseEntity<?> deleteUser(@RequestHeader("Authorization") String jwt,@PathVariable long addressId) {
 
         this.adressService.deleteAddressById(addressId);
 
@@ -51,7 +51,7 @@ public class AddressController {
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<DataResponse> getAdressByUserId(@PathVariable long userId) {
+    public ResponseEntity<DataResponse> getAdressByUserId(@RequestHeader("Authorization") String jwt,@PathVariable long userId) {
 
         List<Address> addressByUserId = this.adressService.getAddressByUserId(userId);
 

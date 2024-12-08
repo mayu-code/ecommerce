@@ -73,19 +73,20 @@ public class AuthController {
 		auth.setStatus(HttpStatus.OK);
 		auth.setMessage("User register succusfull");
 
-		return auth;
+		return ResponseEntity.of(Optional.of(auth));
 	}
 
 	@PostMapping("/user/login")
 	public ResponseEntity<AuthResponse> signin(@RequestBody LoginUser loginRequest) {
-		AuthResponse response = new AuthResponse();
+		AuthResponse auth = new AuthResponse();
 
 		// Fetch user details by email
 		UserDetails userDetails = userDetailsService.loadUserByUsername(loginRequest.getEmail());
 		if (userDetails == null) {
 			auth.setStatus(HttpStatus.UNAUTHORIZED);
 			auth.setMessage("Invalid email or password");
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(auth);
+			auth.setToken(null);
+			return ResponseEntity.of(Optional.of(auth));
 		}
 
 		// Validate the password
@@ -97,7 +98,8 @@ public class AuthController {
 		if (!isPasswordValid) {
 			auth.setStatus(HttpStatus.UNAUTHORIZED);
 			auth.setMessage("Invalid email or password");
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(auth);
+			auth.setToken(null);
+			return ResponseEntity.of(Optional.of(auth));
 		}
 		Authentication authentication = userAuthenticate(userDetails.getUsername(), loginRequest.getPassword());
 
@@ -107,11 +109,11 @@ public class AuthController {
 		this.userService.registerUser(loginUser);
 
 		// Prepare response
-		response.setToken(token);
-		response.setStatus(HttpStatus.OK);
-		response.setMessage("User login successful");
+		auth.setToken(token);
+		auth.setStatus(HttpStatus.OK);
+		auth.setMessage("User login successful");
 
-		return ResponseEntity.ok(auth);
+		return ResponseEntity.of(Optional.of(auth));
 	}
 
 	// authentication for user 
@@ -131,7 +133,7 @@ public class AuthController {
 	@PostMapping("/admin/register")
 	public ResponseEntity<AuthResponse> createAdmin(@RequestBody Admin admin) throws Exception {
 		Admin a = null;
-		AuthResponse response = new AuthResponse();
+		AuthResponse auth = new AuthResponse();
 		Admin isExit = this.adminService.getByEmail(admin.getEmail());
 		if (isExit != null) {
 			throw new Exception("admin is already exits ");
@@ -145,20 +147,21 @@ public class AuthController {
 		auth.setToken(jwtToken);
 		auth.setStatus(HttpStatus.OK);
 		auth.setMessage("Admin register succussfull");
-		return auth;
+		return ResponseEntity.of(Optional.of(auth));
 
 	}
 
 	@PostMapping("/admin/login")
 	public ResponseEntity<AuthResponse> adminLogin(@RequestBody LoginAdmin loginRequest) {
-		AuthResponse response = new AuthResponse();
+		AuthResponse auth = new AuthResponse();
 
 		// Fetch admin details by email
 		UserDetails adminDetails = adminDetailsService.loadUserByUsername(loginRequest.getEmail());
 		if (adminDetails == null) {
 			auth.setStatus(HttpStatus.UNAUTHORIZED);
 			auth.setMessage("Invalid email or password");
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(auth);
+			auth.setToken(null);
+			return ResponseEntity.of(Optional.of(auth));
 		}
 
 		// Validate the password
@@ -170,7 +173,8 @@ public class AuthController {
 		if (!isPasswordValid) {
 			auth.setStatus(HttpStatus.UNAUTHORIZED);
 			auth.setMessage("Invalid email or password");
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(auth);
+			auth.setToken(null);
+			return ResponseEntity.of(Optional.of(auth));
 		}
 
 		// Authenticate the admin
@@ -184,7 +188,7 @@ public class AuthController {
 		auth.setStatus(HttpStatus.OK);
 		auth.setMessage("Admin login successful");
 
-		return ResponseEntity.ok(auth);
+		return ResponseEntity.of(Optional.of(auth));
 	}
 
 	private Authentication adminAuthenticate(String email, String password) {
