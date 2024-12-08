@@ -48,6 +48,26 @@ public class MainController {
         }
     }
 
+    @GetMapping("Product/{id}")
+    public ResponseEntity<DataResponse> getProductByid(@PathVariable("id") long id){
+        DataResponse data = new DataResponse();
+        Product product = new Product();
+        try{
+
+            product = this.productServiceImpl.getProductbyId(id);
+            data.setData(product);
+            data.setMessage("product get successfully");
+            data.setStatus(HttpStatus.OK);
+            return ResponseEntity.of(Optional.of(data));
+
+        }catch(Exception e){
+            data.setData(null);
+            data.setMessage("error found !");
+            data.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+            return ResponseEntity.of(Optional.of(data));
+        }
+    }
+
     @GetMapping("/getProductByCategery/{categery}")
     public ResponseEntity<DataResponse> allProductsbyCategery(@PathVariable("categery") String categery) {
         List<Product> products = new ArrayList<>();
