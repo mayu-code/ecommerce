@@ -99,7 +99,7 @@ public class AuthController {
 			auth.setStatus(HttpStatus.UNAUTHORIZED);
 			auth.setMessage("Invalid email or password");
 			auth.setToken(null);
-			return ResponseEntity.of(Optional.of(auth));
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(auth);
 		}
 		Authentication authentication = userAuthenticate(userDetails.getUsername(), loginRequest.getPassword());
 
@@ -116,7 +116,7 @@ public class AuthController {
 		return ResponseEntity.of(Optional.of(auth));
 	}
 
-	// authentication for user 
+	// authentication for user
 	private Authentication userAuthenticate(String email, String password) {
 		UserDetails details = userDetailsService.loadUserByUsername(email);
 
