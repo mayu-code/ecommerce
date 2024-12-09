@@ -108,9 +108,9 @@ public class UserController {
        User user = userServiceImpl.getUserByJwt(jwt);
        Product product = productServiceImpl.getProductbyId(id);
        DataResponse response = new DataResponse();
+
        OrderItem item = new OrderItem();
         try{
-            item = orderItemServiceImpl.addOrderiItem(user, product, quantity);
             response.setData(item);
             response.setStatus(HttpStatus.OK);
             response.setMessage("success");
