@@ -18,11 +18,11 @@ public class OrderItemServiceImpl implements OrderItemService {
     private OrderItemRepository repository;
 
     @Override
-    public OrderItem addOrderiItem(User user, Product product, int quantity) {
+    public OrderItem addOrderiItem(Product product, int quantity) {
 
         OrderItem orderItem = new OrderItem();
         orderItem.setProduct(product);
-        orderItem.setPrice(product.getPrice());
+        orderItem.setPrice(product.getPrice() * quantity);
         orderItem.setQuantity(quantity);
 
         return this.repository.save(orderItem);
@@ -34,6 +34,5 @@ public class OrderItemServiceImpl implements OrderItemService {
         this.repository.deleteById(orderItemId);
 
     }
-
 
 }
