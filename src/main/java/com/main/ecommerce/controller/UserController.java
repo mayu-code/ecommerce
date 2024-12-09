@@ -148,10 +148,19 @@ public class UserController {
 
     public ResponseEntity<DataResponse> removeCartItem(@RequestHeader("Authorization") String jwt,
             @PathVariable("stackId") long stackId, @PathVariable("itemId") long itemId) {
+                OrderStack orderStack = new OrderStack();
+                DataResponse response = new DataResponse();
         try {
-            return null;
+            orderStack = this.orderStackServiceImpl.removeOrderItemFromCart(itemId, stackId);
+            response.setData(orderStack);
+            response.setStatus(HttpStatus.OK);
+            response.setMessage("Success");
+            return ResponseEntity.ok().body(response);
         } catch (Exception e) {
-            return null;
+            response.setData(null);
+            response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+            response.setMessage("failed");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
 }
