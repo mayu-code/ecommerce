@@ -8,9 +8,8 @@ import com.main.ecommerce.entities.User;
 
 public interface OrderItemService {
 
-    OrderItem addOrderiItem(User user, Product product, int quantity);
+    OrderItem addOrderiItem(Product product, int quantity);
 
     void removeOrderItemByOrderItemId(long orderItemId);
-
 
 }
