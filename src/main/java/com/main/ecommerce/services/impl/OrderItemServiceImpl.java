@@ -1,5 +1,7 @@
 package com.main.ecommerce.services.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.main.ecommerce.entities.OrderItem;
@@ -31,6 +33,11 @@ public class OrderItemServiceImpl implements OrderItemService {
     public void removeOrderItemByOrderItemId(long orderItemId) {
         this.repository.deleteById(orderItemId);
 
+    }
+
+    @Override
+    public List<OrderItem> getOrderItemsByUserId(long userId) {
+        return this.repository.findByUserId(userId);
     }
 
 }
