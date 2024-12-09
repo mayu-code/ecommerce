@@ -5,9 +5,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.main.ecommerce.ResponseEntity.AuthResponse;
 import com.main.ecommerce.ResponseEntity.DataResponse;
 import com.main.ecommerce.entities.OrderItem;
+import com.main.ecommerce.entities.OrderStack;
 import com.main.ecommerce.entities.Product;
 import com.main.ecommerce.entities.User;
 import com.main.ecommerce.services.impl.OrderItemServiceImpl;
+import com.main.ecommerce.services.impl.OrderStackServiceImpl;
 import com.main.ecommerce.services.impl.ProductServiceImpl;
 import com.main.ecommerce.services.impl.UserServiceImpl;
 
@@ -39,6 +41,9 @@ public class UserController {
 
     @Autowired
     private OrderItemServiceImpl orderItemServiceImpl;
+
+    @Autowired
+    private OrderStackServiceImpl orderStackServiceImpl;
 
     @PostMapping("/updateUser")
     public ResponseEntity<DataResponse> updateUser(@RequestHeader("Authorization") String jwt,
@@ -108,10 +113,12 @@ public class UserController {
        User user = userServiceImpl.getUserByJwt(jwt);
        Product product = productServiceImpl.getProductbyId(id);
        DataResponse response = new DataResponse();
-
+       OrderStack stack = new OrderStack();
        OrderItem item = new OrderItem();
         try{
-            response.setData(item);
+            item = orderItemServiceImpl.addOrderiItem(product, quantity);
+            stack = orderStackServiceImpl.addOrderItem(user, item);
+            response.setData(stack);
             response.setStatus(HttpStatus.OK);
             response.setMessage("success");
 
