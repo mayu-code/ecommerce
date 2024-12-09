@@ -99,5 +99,16 @@ public class UserServiceImpl implements UserServices{
        
         return productReposotory.findById(id).get();
     }
+
+    @Override
+    public void removeOrder(User user, long id) throws Exception {
+        User user1 = reposotory.findById(user.getId()).get();
+        if (user1.getMyOrders().contains(id)) {
+            user1.getMyOrders().remove(id);
+            this.reposotory.save(user1);
+        } else {
+            throw new Exception("order product not found !!");
+        }
+    }
     
 }

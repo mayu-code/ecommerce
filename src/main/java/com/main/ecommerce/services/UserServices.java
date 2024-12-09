@@ -17,4 +17,5 @@ public interface UserServices {
     public List<User> getAllUsers();
     User getByEmail(String email);
     User getUserByJwt(String jwt);
+    void removeOrder(User user, long id) throws Exception;
 }

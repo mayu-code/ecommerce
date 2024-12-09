@@ -2,6 +2,7 @@ package com.main.ecommerce.controller;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import com.main.ecommerce.ResponseEntity.AuthResponse;
 import com.main.ecommerce.ResponseEntity.DataResponse;
 import com.main.ecommerce.entities.Address;
 import com.main.ecommerce.entities.Product;
@@ -175,7 +176,6 @@ public class UserController {
         } catch (Exception e) {
             response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
             response.setMessage("Product remove from the cart the cart failed ! ");
-
             return ResponseEntity.ok(response);
         }
     }
@@ -221,5 +221,31 @@ public class UserController {
 
             return ResponseEntity.ok(response);
         }
+    }
+
+    @PostMapping("/order/remove/{productId}")
+    public ResponseEntity<AuthResponse> removeOrderProducts(@RequestHeader("Authorization") String jwt,
+            @PathVariable long productId) throws Exception {
+
+        AuthResponse authResponse = new AuthResponse();
+
+        try {
+            User user = this.userServiceImpl.getUserByJwt(jwt);
+            this.userServiceImpl.removeOrder(user, productId);
+
+            authResponse.setStatus(HttpStatus.OK);
+            authResponse.setMessage("Order Deleted Successfully !");
+
+            return ResponseEntity.ok().body(authResponse);
+
+        } catch (Exception e) {
+
+            authResponse.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+            authResponse.setMessage("Order Not Found !");
+
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(authResponse);
+
+        }
+
     }
 }

@@ -56,7 +56,6 @@ public class AdminController {
 
         response.setStatus(HttpStatus.CREATED);
         response.setMessage("Product Added Successfull");
-
         return ResponseEntity.of(Optional.of(response));
 
     }
@@ -132,7 +131,7 @@ public class AdminController {
         response.setStatus(HttpStatus.OK);
         response.setMessage("Fetch all users successful");
         response.setData(allUsers);
-
+        
         return ResponseEntity.of(Optional.of(response));
     }
 
