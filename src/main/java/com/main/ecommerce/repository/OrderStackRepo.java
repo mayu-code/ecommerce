@@ -4,7 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.main.ecommerce.entities.OrderStack;
 
-public interface OrderStackRepo extends JpaRepository<OrderStack,Long> {
+public interface OrderStackRepo extends JpaRepository<OrderStack, Long> {
 
-    
+    OrderStack findByUserId(long userId);
 }

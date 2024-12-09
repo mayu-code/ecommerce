@@ -12,4 +12,6 @@ public interface OrderStackService {
 
     OrderStack getOrderStack(long stackId);
 
+    OrderStack getOrderStackByUserId(long userId);
+
 }
