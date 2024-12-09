@@ -12,25 +12,25 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 
-@Entity
+// @Entity
 public class OrderPayment {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long paymentId;
+    // @Id
+    // @GeneratedValue(strategy = GenerationType.AUTO)
+    // private Long paymentId;
 
-    @OneToOne
-    @JoinColumn(name = "order_id", nullable = false)
-    private Order order;
+    // @OneToOne
+    // @JoinColumn(name = "order_id", nullable = false)
+    // private Order order;
 
-    private Double amount;
+    // private Double amount;
 
-    private PaymentMethod paymentMethod;
+    // private PaymentMethod paymentMethod;
 
-    private PaymentStatus paymentStatus;
+    // private PaymentStatus paymentStatus;
 
-    private String transitionId;
+    // private String transitionId;
 
-    private LocalDateTime paymentDate;
+    // private LocalDateTime paymentDate;
 
 }

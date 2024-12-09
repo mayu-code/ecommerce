@@ -14,30 +14,29 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 
-@Entity
 public class Order {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long orderId;
+    // @Id
+    // @GeneratedValue(strategy = GenerationType.AUTO)
+    // private long orderId;
 
-    @ManyToOne
-    private User user;
+    // @ManyToOne
+    // private User user;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
-    private List<OrderItem> items;
+    // // @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    // // private List<OrderItem> items;
 
-    private Double totalAmmount;
+    // private Double totalAmmount;
 
-    // @Column(nullable = false)
-    // private String deliverAddress;
+    // // @Column(nullable = false)
+    // // private String deliverAddress;
 
-    private OrderStatus status;
+    // private OrderStatus status;
 
-    private OrderPayment payment;
+    // private OrderPayment payment;
 
-    private LocalDateTime createdAt = LocalDateTime.now();
+    // private LocalDateTime createdAt = LocalDateTime.now();
 
-    private LocalDateTime updatedAt;
+    // private LocalDateTime updatedAt;
 
 }
