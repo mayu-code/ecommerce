@@ -50,11 +50,10 @@ public class User implements UserDetails {
 
 	// order methods don't see above methods
 
-	@OneToOne(mappedBy = "user" , cascade = CascadeType.ALL,fetch = FetchType.LAZY)
-	private OrderStack stack;
+	@OneToMany(mappedBy = "user" , cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+	private List<OrderStack> stack;
 
 
-	
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return List.of(new SimpleGrantedAuthority("user"));

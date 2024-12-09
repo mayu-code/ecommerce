@@ -132,7 +132,21 @@ public class UserController {
     }
 
 
-    public ResponseEntity<DataResponse> getStack(){
-        return null;
+    @GetMapping("/getCart")
+    public ResponseEntity<DataResponse> getStack(@RequestHeader("Authorization") String jwt){
+        User user = userServiceImpl.getUserByJwt(jwt);
+        DataResponse response = new DataResponse();
+        try{
+            OrderStack orderStack = orderStackServiceImpl.getOrderStackByUserId(user.getId());
+            response.setData(orderStack);
+            response.setStatus(HttpStatus.OK);
+            response.setMessage("success");
+            return ResponseEntity.of(Optional.of(response));
+        }catch(Exception e){
+            response.setData(null);
+            response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+            response.setMessage("failed");
+            return ResponseEntity.of(Optional.of(response));
+        }
     }
 }
