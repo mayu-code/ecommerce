@@ -82,7 +82,6 @@ public class UserController {
         }
     }
 
-
     @GetMapping("/getUser")
     public ResponseEntity<DataResponse> getUserById(@RequestHeader("Authorization") String jwt) {
 
@@ -105,48 +104,54 @@ public class UserController {
         }
     }
 
-   
-
-
     @PostMapping("/addCart/{id}/{quantity}")
-    public ResponseEntity<DataResponse> addCartItem(@RequestHeader("Authorization") String jwt,@PathVariable("id") long id,@PathVariable("quantity") int quantity){
-       User user = userServiceImpl.getUserByJwt(jwt);
-       Product product = productServiceImpl.getProductbyId(id);
-       DataResponse response = new DataResponse();
-       OrderStack stack = new OrderStack();
-       OrderItem item = new OrderItem();
-        try{
+    public ResponseEntity<DataResponse> addCartItem(@RequestHeader("Authorization") String jwt,
+            @PathVariable("id") long id, @PathVariable("quantity") int quantity) {
+        User user = userServiceImpl.getUserByJwt(jwt);
+        Product product = productServiceImpl.getProductbyId(id);
+        DataResponse response = new DataResponse();
+        OrderStack stack = new OrderStack();
+        OrderItem item = new OrderItem();
+        try {
             item = orderItemServiceImpl.addOrderiItem(product, quantity);
             stack = orderStackServiceImpl.addOrderItem(user, item);
             response.setData(stack);
             response.setStatus(HttpStatus.OK);
             response.setMessage("success");
 
-            return ResponseEntity.of(Optional.of(response)); 
-        }catch(Exception e){
+            return ResponseEntity.of(Optional.of(response));
+        } catch (Exception e) {
             response.setData(null);
             response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
             response.setMessage("failed");
-            return ResponseEntity.of(Optional.of(response)); 
+            return ResponseEntity.of(Optional.of(response));
         }
     }
 
-
     @GetMapping("/getCart")
-    public ResponseEntity<DataResponse> getStack(@RequestHeader("Authorization") String jwt){
+    public ResponseEntity<DataResponse> getStack(@RequestHeader("Authorization") String jwt) {
         User user = userServiceImpl.getUserByJwt(jwt);
         DataResponse response = new DataResponse();
-        try{
+        try {
             OrderStack orderStack = orderStackServiceImpl.getOrderStackByUserId(user.getId());
             response.setData(orderStack);
             response.setStatus(HttpStatus.OK);
             response.setMessage("success");
             return ResponseEntity.of(Optional.of(response));
-        }catch(Exception e){
+        } catch (Exception e) {
             response.setData(null);
             response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
             response.setMessage("failed");
             return ResponseEntity.of(Optional.of(response));
+        }
+    }
+
+    public ResponseEntity<DataResponse> removeCartItem(@RequestHeader("Authorization") String jwt,
+            @PathVariable("stackId") long stackId, @PathVariable("itemId") long itemId) {
+        try {
+            return null;
+        } catch (Exception e) {
+            return null;
         }
     }
 }
