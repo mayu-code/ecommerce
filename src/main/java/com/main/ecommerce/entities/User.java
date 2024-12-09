@@ -3,7 +3,6 @@ package com.main.ecommerce.entities;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -32,7 +31,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class User implements UserDetails{
+public class User implements UserDetails {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
@@ -42,14 +41,18 @@ public class User implements UserDetails{
 	private String password;
 	private LocalDateTime registationDate;
 	private LocalDateTime loginDate;
-	private LocalDateTime updateDate; 
-	private List<Long> myOrders = new ArrayList<>();
-	private List<Long> myCart = new ArrayList<>();
+	private LocalDateTime updateDate;
+
+	// @OneToMany(mappedBy = "user",cascade = CascadeType.ALL,fetch =
+	// FetchType.LAZY)
+	// private List<Order> myOrders;
+
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<OrderItem> myCart;
 
 	@JsonManagedReference
-	@OneToMany(mappedBy = "user",orphanRemoval = true,cascade = CascadeType.ALL,fetch = FetchType.LAZY)
-    private List<Address> addresses = new ArrayList<>();
-
+	@OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<Address> addresses = new ArrayList<>();
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
