@@ -100,31 +100,7 @@ public class UserController {
         }
     }
 
-    @PostMapping("/order/remove/{productId}")
-    public ResponseEntity<AuthResponse> removeOrderProducts(@RequestHeader("Authorization") String jwt,
-            @PathVariable long productId) throws Exception {
-
-        AuthResponse authResponse = new AuthResponse();
-
-        try {
-            User user = this.userServiceImpl.getUserByJwt(jwt);
-            this.userServiceImpl.removeOrder(user, productId);
-
-            authResponse.setStatus(HttpStatus.OK);
-            authResponse.setMessage("Order Deleted Successfully !");
-
-            return ResponseEntity.ok().body(authResponse);
-
-        } catch (Exception e) {
-
-            authResponse.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
-            authResponse.setMessage("Order Not Found !");
-
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(authResponse);
-
-        }
-
-    }
+   
 
 
     @PostMapping("/addCart/{id}/{quantity}")

@@ -19,8 +19,7 @@ public class UserServiceImpl implements UserServices{
     @Autowired
     private UserReposotory reposotory;
 
-    @Autowired
-    private ProductReposotory productReposotory;
+
 
     @Override
     public User registerUser(User user) {
@@ -37,32 +36,6 @@ public class UserServiceImpl implements UserServices{
         return this.reposotory.save(user);
     }
 
-    @Override
-    public Product addCart(User user, long id) {
-       User user1  = reposotory.findById(user.getId()).get();
-        if(user1.getMyCart().contains(id)){
-            return productReposotory.findById(id).get();
-        }
-            user1.getMyCart().add(id);
-
-        reposotory.save(user1);
-       
-        return productReposotory.findById(id).get();
-       
-    }
-
-    @Override
-    public Product addOrder(User user, long id) {
-        User user1 = reposotory.findById(user.getId()).get();
-        if(user1.getMyOrders().contains(id)){
-            user1.getMyOrders().remove(id);
-        }else{
-            user1.getMyOrders().add(id);
-        }
-        reposotory.save(user1);
-
-        return productReposotory.findById(id).get();
-    }
 
     @Override
     public void deleteUser(long id) {
@@ -89,26 +62,5 @@ public class UserServiceImpl implements UserServices{
         return user;
     }
 
-    @Override
-    public Product removeCart(User user, long id) {
-        User user1  = reposotory.findById(user.getId()).get();
-        if(user1.getMyCart().contains(id)){
-            user1.getMyCart().remove(id);
-        }
-        reposotory.save(user1);
-       
-        return productReposotory.findById(id).get();
-    }
-
-    @Override
-    public void removeOrder(User user, long id) throws Exception {
-        User user1 = reposotory.findById(user.getId()).get();
-        if (user1.getMyOrders().contains(id)) {
-            user1.getMyOrders().remove(id);
-            this.reposotory.save(user1);
-        } else {
-            throw new Exception("order product not found !!");
-        }
-    }
     
 }
