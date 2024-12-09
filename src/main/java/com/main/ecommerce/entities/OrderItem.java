@@ -2,6 +2,8 @@ package com.main.ecommerce.entities;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.annotation.Generated;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -9,6 +11,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import lombok.Data;
 
 @Entity
@@ -23,6 +26,7 @@ public class OrderItem {
     // @JoinColumn(name = "order_id", nullable = false)
     // private Order order;
 
+    @ManyToOne
     private Product product;
 
     private Integer quantity;
@@ -32,6 +36,8 @@ public class OrderItem {
     private LocalDateTime addedDate = LocalDateTime.now();
 
     @ManyToOne
+	@JoinColumn(name = "user_id")
+	@JsonBackReference
     private User user;
 
 }
