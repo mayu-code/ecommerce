@@ -57,4 +57,20 @@ public class OrderStackServiceImpl implements OrderStackService {
         return orders.stream().filter(o -> o.getStatus().equals(OrderStatus.PENDING)).findFirst().get();
     }
 
+    @Override
+    public OrderStack removeOrderItemFromCart(long orderItemId, long stackId) {
+
+        OrderStack orderStack = this.orderStackRepo.findById(stackId).get();
+
+        OrderItem orderItem = orderStack.getMycart().stream().filter(item -> item.getItemId() == orderItemId)
+                .findFirst().get();
+
+        this.orderItemRepository.delete(orderItem);
+
+        orderStack.setTotalPrice(orderStack.getTotalPrice() - orderItem.getPrice());
+
+        return this.orderStackRepo.save(orderStack);
+
+    }
+
 }

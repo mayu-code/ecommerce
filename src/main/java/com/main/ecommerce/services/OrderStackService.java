@@ -14,4 +14,6 @@ public interface OrderStackService {
 
     OrderStack getOrderStackByUserId(long userId);
 
+    OrderStack removeOrderItemFromCart(long orderItemId, long stackId);
+
 }
