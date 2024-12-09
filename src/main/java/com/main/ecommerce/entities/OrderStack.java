@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.main.ecommerce.status.OrderStatus;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -24,14 +25,15 @@ public class OrderStack {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long stackId;
 
-    @OneToMany(mappedBy = "stack" , cascade = CascadeType.ALL , fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "stack", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<OrderItem> Mycart = new ArrayList<>();
 
+    private int totalPrice = 0;
 
-    private int totalPrice=0;
+    private OrderStatus status = OrderStatus.PENDING;
 
     @OneToOne
     @JsonIgnore
     private User user;
-    
+
 }

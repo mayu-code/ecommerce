@@ -33,4 +33,9 @@ public class OrderStackServiceImpl implements OrderStackService {
         return this.orderStackRepo.findById(stackId).get();
     }
 
+    @Override
+    public OrderStack getOrderStackByUserId(long userId) {
+        return this.orderStackRepo.findByUserId(userId);
+    }
+
 }
