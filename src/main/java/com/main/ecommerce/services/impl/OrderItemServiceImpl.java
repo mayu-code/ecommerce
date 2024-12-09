@@ -21,8 +21,6 @@ public class OrderItemServiceImpl implements OrderItemService {
     public OrderItem addOrderiItem(User user, Product product, int quantity) {
 
         OrderItem orderItem = new OrderItem();
-
-        orderItem.setUser(user);
         orderItem.setProduct(product);
         orderItem.setPrice(product.getPrice());
         orderItem.setQuantity(quantity);
@@ -37,9 +35,5 @@ public class OrderItemServiceImpl implements OrderItemService {
 
     }
 
-    @Override
-    public List<OrderItem> getOrderItemsByUserId(long userId) {
-        return this.repository.findByUserId(userId);
-    }
 
 }

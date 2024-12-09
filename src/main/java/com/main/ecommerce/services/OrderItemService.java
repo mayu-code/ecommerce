@@ -12,5 +12,5 @@ public interface OrderItemService {
 
     void removeOrderItemByOrderItemId(long orderItemId);
 
-    List<OrderItem> getOrderItemsByUserId(long userId);
+
 }

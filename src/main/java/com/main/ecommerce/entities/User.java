@@ -43,17 +43,18 @@ public class User implements UserDetails {
 	private LocalDateTime loginDate;
 	private LocalDateTime updateDate;
 
-	// @OneToMany(mappedBy = "user",cascade = CascadeType.ALL,fetch =
-	// FetchType.LAZY)
-	// private List<Order> myOrders;
-
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private List<OrderItem> myCart;
-
 	@JsonManagedReference
 	@OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<Address> addresses = new ArrayList<>();
 
+
+	// order methods don't see above methods
+
+	@OneToOne(mappedBy = "user" , cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+	private OrderStack stack;
+
+
+	
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return List.of(new SimpleGrantedAuthority("user"));
