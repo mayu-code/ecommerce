@@ -14,6 +14,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import lombok.Data;
+import lombok.Builder.Default;
 
 @Entity
 @Data
@@ -26,7 +27,8 @@ public class OrderStack {
     @OneToMany(mappedBy = "stack" , cascade = CascadeType.ALL , fetch = FetchType.LAZY)
     private List<OrderItem> Mycart = new ArrayList<>();
 
-    private int totalPrice;
+
+    private int totalPrice=0;
 
     @OneToOne
     @JsonIgnore
