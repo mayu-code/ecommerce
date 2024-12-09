@@ -146,6 +146,7 @@ public class UserController {
         }
     }
 
+    @PostMapping("/removeCart/{stackId}/{itemId}")
     public ResponseEntity<DataResponse> removeCartItem(@RequestHeader("Authorization") String jwt,
             @PathVariable("stackId") long stackId, @PathVariable("itemId") long itemId) {
                 OrderStack orderStack = new OrderStack();

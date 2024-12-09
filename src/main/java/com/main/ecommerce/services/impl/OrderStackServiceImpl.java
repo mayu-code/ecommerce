@@ -64,10 +64,15 @@ public class OrderStackServiceImpl implements OrderStackService {
 
         OrderItem orderItem = orderStack.getMycart().stream().filter(item -> item.getItemId() == orderItemId)
                 .findFirst().get();
+        if(orderStack.getMycart().contains(orderItem)){
+            orderStack.getMycart().remove(orderItem);
+            this.orderItemRepository.deleteById(orderItemId);
+        }
 
-        this.orderItemRepository.delete(orderItem);
 
         orderStack.setTotalPrice(orderStack.getTotalPrice() - orderItem.getPrice());
+
+        
 
         return this.orderStackRepo.save(orderStack);
 
