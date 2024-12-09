@@ -3,6 +3,7 @@ package com.main.ecommerce.payment;
 public enum PaymentMethod {
     CREDIT_CARD,
     PAYPAL,
-    COD
+    COD,
+    DEBIT_CARD
 
 }
