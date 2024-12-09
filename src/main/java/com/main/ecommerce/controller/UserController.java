@@ -4,7 +4,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.main.ecommerce.ResponseEntity.AuthResponse;
 import com.main.ecommerce.ResponseEntity.DataResponse;
+import com.main.ecommerce.entities.OrderItem;
+import com.main.ecommerce.entities.Product;
 import com.main.ecommerce.entities.User;
+import com.main.ecommerce.services.impl.OrderItemServiceImpl;
 import com.main.ecommerce.services.impl.ProductServiceImpl;
 import com.main.ecommerce.services.impl.UserServiceImpl;
 
@@ -33,6 +36,9 @@ public class UserController {
 
     @Autowired
     private UserServiceImpl userServiceImpl;
+
+    @Autowired
+    private OrderItemServiceImpl orderItemServiceImpl;
 
     @PostMapping("/updateUser")
     public ResponseEntity<DataResponse> updateUser(@RequestHeader("Authorization") String jwt,
@@ -121,11 +127,24 @@ public class UserController {
     }
 
 
+    @PostMapping("/addCart/{id}/{quantity}")
     public ResponseEntity<DataResponse> addCartItem(@RequestHeader("Authorization") String jwt,@PathVariable("id") long id,@PathVariable("quantity") int quantity){
+       User user = userServiceImpl.getUserByJwt(jwt);
+       Product product = productServiceImpl.getProductbyId(id);
+       DataResponse response = new DataResponse();
+       OrderItem item = new OrderItem();
         try{
-            return null;
+            item = orderItemServiceImpl.addOrderiItem(user, product, quantity);
+            response.setData(item);
+            response.setStatus(HttpStatus.OK);
+            response.setMessage("success");
+
+            return ResponseEntity.of(Optional.of(response)); 
         }catch(Exception e){
-            return null;
+            response.setData(null);
+            response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+            response.setMessage("failed");
+            return ResponseEntity.of(Optional.of(response)); 
         }
     }
 }
