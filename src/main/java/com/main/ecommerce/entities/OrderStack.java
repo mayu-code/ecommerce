@@ -16,7 +16,6 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import lombok.Data;
-import lombok.Builder.Default;
 
 @Entity
 @Data

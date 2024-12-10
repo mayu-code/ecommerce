@@ -152,7 +152,9 @@ public class UserController {
             response.setMessage("success");
             return ResponseEntity.of(Optional.of(response));
         } catch (Exception e) {
-            response.setData(null);
+            OrderStack orderStack = new OrderStack();
+            orderStack.setUser(user);
+            response.setData(orderStack);
             response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
             response.setMessage("failed");
             return ResponseEntity.of(Optional.of(response));
