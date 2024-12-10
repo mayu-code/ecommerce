@@ -68,12 +68,7 @@ public class OrderStackServiceImpl implements OrderStackService {
             orderStack.getMycart().remove(orderItem);
             this.orderItemRepository.deleteById(orderItemId);
         }
-
-
         orderStack.setTotalPrice(orderStack.getTotalPrice() - orderItem.getPrice());
-
-        
-
         return this.orderStackRepo.save(orderStack);
 
     }
