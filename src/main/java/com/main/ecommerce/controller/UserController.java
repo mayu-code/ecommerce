@@ -209,7 +209,7 @@ public class UserController {
         }
     }
 
-    @PostMapping("/{orderId}/payment")
+    @PostMapping("/payment/{orderId}")
     public ResponseEntity<DataResponse> proceedToPay(@RequestHeader("Authorization") String jwt,
             @PathVariable long orderId) {
 
@@ -244,6 +244,10 @@ public class UserController {
 
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
+
+    }
+
+    public ResponseEntity<DataResponse> getUserOrders(@RequestHeader("Authorization") String jwt) {
 
     }
 }
