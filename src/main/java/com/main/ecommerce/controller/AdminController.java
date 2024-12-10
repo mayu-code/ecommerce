@@ -46,12 +46,19 @@ public class AdminController {
     @Autowired
     private ImageUploader imageUploader;
 
+    @GetMapping("/getAdmin")
+    public ResponseEntity<Admin> getAdmin(@RequestHeader("Authorization") String jwt) {
+        Admin admin = this.adminService.getAdminByJwt(jwt);
+        return ResponseEntity.ok().body(admin);
+    }
+
     @PostMapping("/addProduct")
-    public ResponseEntity<?> addProduct(@RequestHeader("Authorization") String jwt,@RequestPart("product") Product product,@RequestParam("image") MultipartFile file){
+    public ResponseEntity<?> addProduct(@RequestHeader("Authorization") String jwt,
+            @RequestPart("product") Product product, @RequestParam("image") MultipartFile file) {
         Admin admin = this.adminService.getAdminByJwt(jwt);
         String url = imageUploader.iamgeUploader(file);
         product.setImgUrl(url);
-        this.adminService.addProductWithAdminId(product,admin.getId());
+        this.adminService.addProductWithAdminId(product, admin.getId());
         AuthResponse response = new AuthResponse();
 
         response.setStatus(HttpStatus.CREATED);
@@ -131,7 +138,7 @@ public class AdminController {
         response.setStatus(HttpStatus.OK);
         response.setMessage("Fetch all users successful");
         response.setData(allUsers);
-        
+
         return ResponseEntity.of(Optional.of(response));
     }
 

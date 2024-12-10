@@ -3,11 +3,13 @@ package com.main.ecommerce.services.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import com.main.ecommerce.entities.OrderItem;
 import com.main.ecommerce.entities.OrderStack;
 import com.main.ecommerce.entities.User;
+import com.main.ecommerce.entities.UserOrder;
 import com.main.ecommerce.repository.OrderItemRepository;
 import com.main.ecommerce.repository.OrderStackRepo;
 import com.main.ecommerce.services.OrderStackService;
@@ -21,6 +23,10 @@ public class OrderStackServiceImpl implements OrderStackService {
 
     @Autowired
     private OrderItemRepository orderItemRepository;
+
+    @Lazy
+    @Autowired
+    private UserOrderServiceImpl userOrderServiceImpl;
 
     @Override
     public OrderStack addOrderItem(User user, OrderItem orderItem) {
@@ -64,12 +70,19 @@ public class OrderStackServiceImpl implements OrderStackService {
 
         OrderItem orderItem = orderStack.getMycart().stream().filter(item -> item.getItemId() == orderItemId)
                 .findFirst().get();
-        if(orderStack.getMycart().contains(orderItem)){
+        if (orderStack.getMycart().contains(orderItem)) {
             orderStack.getMycart().remove(orderItem);
             this.orderItemRepository.deleteById(orderItemId);
         }
         orderStack.setTotalPrice(orderStack.getTotalPrice() - orderItem.getPrice());
         return this.orderStackRepo.save(orderStack);
+
+    }
+
+    @Override
+    public OrderStack getOrderStackByUserOrder(UserOrder userOrder) {
+
+        return this.orderStackRepo.findByUserOrder(userOrder);
 
     }
 

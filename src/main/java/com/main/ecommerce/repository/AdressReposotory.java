@@ -9,4 +9,5 @@ import com.main.ecommerce.entities.Address;
 public interface AdressReposotory extends JpaRepository<Address, Long> {
 
     List<Address> findByUserId(Long id);
+
 }

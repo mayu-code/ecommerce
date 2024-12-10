@@ -26,6 +26,7 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -270,6 +271,59 @@ public class UserController {
             response.setData(userOrder);
 
             return ResponseEntity.ok().body(response);
+        }
+    }
+
+    @GetMapping("/orderDetail/{orderId}")
+    public ResponseEntity<DataResponse> getOrderById(@RequestHeader("Authorization") String jwt,
+            @PathVariable long orderId) {
+
+        User user = this.userServiceImpl.getUserByJwt(jwt);
+        DataResponse response = new DataResponse();
+
+        try {
+
+            UserOrder userOrder = this.userOrderServiceImpl.getUserOrderById(orderId);
+            response.setStatus(HttpStatus.OK);
+            response.setMessage("success");
+            response.setData(userOrder);
+
+            return ResponseEntity.ok().body(response);
+
+        } catch (Exception e) {
+
+            response.setStatus(HttpStatus.NOT_FOUND);
+
+            response.setMessage("Not found");
+
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
+    }
+
+    @GetMapping("/orderStack/{orderId}")
+    public ResponseEntity<DataResponse> getOrderStackByOrderId(@RequestHeader("Authorization") String jwt,
+            @PathVariable long orderId) {
+
+        User user = this.userServiceImpl.getUserByJwt(jwt);
+        DataResponse response = new DataResponse();
+
+        try {
+
+            UserOrder userOrder = this.userOrderServiceImpl.getUserOrderById(orderId);
+            OrderStack orderStack = this.orderStackServiceImpl.getOrderStackByUserOrder(userOrder);
+            response.setStatus(HttpStatus.OK);
+            response.setMessage("success");
+            response.setData(orderStack);
+
+            return ResponseEntity.ok().body(response);
+
+        } catch (Exception e) {
+
+            response.setStatus(HttpStatus.NOT_FOUND);
+
+            response.setMessage("Not found");
+
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
     }
 }
