@@ -28,6 +28,7 @@ public class UserOrderServiceImpl implements UserOrderService {
         OrderStack orderStack = this.orderStackServiceImpl.getOrderStack(stackId);
 
         userOrder.setOrderStack(orderStack);
+
         userOrder.setUser(orderStack.getUser());
 
         orderStack.setStatus(OrderStatus.COMPLETED);
@@ -38,6 +39,11 @@ public class UserOrderServiceImpl implements UserOrderService {
 
         return this.userOrderRepository.save(userOrder);
 
+    }
+
+    @Override
+    public UserOrder getUserOrderById(long orderId) {
+        return this.userOrderRepository.findById(orderId).get();
     }
 
 }
