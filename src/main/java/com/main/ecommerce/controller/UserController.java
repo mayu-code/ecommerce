@@ -189,8 +189,6 @@ public class UserController {
 
         try {
             OrderStack orderStack = this.orderStackServiceImpl.getOrderStackByUserId(user.getId());
-
-            userOrder.setPaymentMethod(PaymentMethod.PAYPAL);
             userOrder.setTotalPaid(orderStack.getTotalPrice());
             userOrder.setTransitionId(UUID.randomUUID().toString());
 
@@ -214,7 +212,6 @@ public class UserController {
             @PathVariable long orderId) {
 
         User user = this.userServiceImpl.getUserByJwt(jwt);
-
         DataResponse response = new DataResponse();
 
         try {
