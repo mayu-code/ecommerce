@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.main.ecommerce.ResponseEntity.AuthResponse;
 import com.main.ecommerce.ResponseEntity.DataResponse;
 import com.main.ecommerce.entities.Address;
 import com.main.ecommerce.entities.User;
@@ -33,27 +34,64 @@ public class AddressController {
     private UserServiceImpl userService;
 
     @PostMapping("/addAddress")
-    public ResponseEntity<?> addAddressToUser(@RequestHeader("Authorization") String jwt, @RequestBody Address address) {
+    public ResponseEntity<DataResponse> addAddressToUser(@RequestHeader("Authorization") String jwt,
+            @RequestBody Address address) {
         User user = userService.getUserByJwt(jwt);
-        Address add = this.adressService.addAddressToUserWithUserId(user.getId(), address);
+        DataResponse response = new DataResponse();
+        try {
+            Address add = this.adressService.addAddressToUserWithUserId(user.getId(), address);
 
-        return ResponseEntity.of(Optional.of(add));
+            response.setStatus(HttpStatus.CREATED);
+            response.setMessage("address added !");
+            response.setData(add);
+
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+
+        } catch (Exception e) {
+            response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+            response.setMessage("failed");
+
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
 
     }
 
-    @PostMapping("/delete/{addressId}")
-    public ResponseEntity<?> deleteUser(@RequestHeader("Authorization") String jwt,@PathVariable long addressId) {
+    @PostMapping("/address/delete/{addressId}")
+    public ResponseEntity<AuthResponse> deleteUser(@RequestHeader("Authorization") String jwt,
+            @PathVariable long addressId) {
 
-        this.adressService.deleteAddressById(addressId);
+        this.userService.getUserByJwt(jwt);
+        AuthResponse response = new AuthResponse();
 
-        return new ResponseEntity<>("deleted !", HttpStatus.OK);
+        if (!this.adressService.existById(addressId)) {
+            response.setStatus(HttpStatus.NOT_FOUND);
+            response.setMessage("Address Not Found !!");
+
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
+
+        try {
+            this.adressService.deleteAddressById(addressId);
+            response.setStatus(HttpStatus.OK);
+            response.setMessage("Address deleted Successfully !!");
+
+            return ResponseEntity.ok().body(response);
+
+        } catch (Exception e) {
+            response.setStatus(HttpStatus.NOT_FOUND);
+            response.setMessage("Address Not Found !!");
+
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
 
     }
 
-    @GetMapping("/{userId}")
-    public ResponseEntity<DataResponse> getAdressByUserId(@RequestHeader("Authorization") String jwt,@PathVariable long userId) {
+    @GetMapping("/address")
+    public ResponseEntity<DataResponse> getAdressByUserId(@RequestHeader("Authorization") String jwt) {
 
-        List<Address> addressByUserId = this.adressService.getAddressByUserId(userId);
+        User user = this.userService.getUserByJwt(jwt);
+
+        List<Address> addressByUserId = this.adressService.getAddressByUserId(user.getId());
 
         DataResponse response = new DataResponse();
 
@@ -64,6 +102,5 @@ public class AddressController {
         return ResponseEntity.of(Optional.of(response));
 
     }
-
 
 }

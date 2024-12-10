@@ -29,7 +29,6 @@ public class AdressServiceImpl implements AdressService {
         address.setUser(user);
         this.userService.registerUser(user);
 
-
         return address;
 
     }
@@ -42,6 +41,11 @@ public class AdressServiceImpl implements AdressService {
     @Override
     public List<Address> getAddressByUserId(long userId) {
         return this.adressReposotory.findByUserId(userId);
+    }
+
+    @Override
+    public boolean existById(long addressId) {
+        return this.adressReposotory.existsById(addressId);
     }
 
 }

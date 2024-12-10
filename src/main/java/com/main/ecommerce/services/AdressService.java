@@ -12,4 +12,5 @@ public interface AdressService {
 
     List<Address> getAddressByUserId(long userId);
 
+    boolean existById(long addressId);
 }
