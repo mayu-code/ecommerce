@@ -5,16 +5,19 @@ import org.springframework.web.bind.annotation.RestController;
 import com.main.ecommerce.ResponseEntity.AuthResponse;
 import com.main.ecommerce.ResponseEntity.DataResponse;
 import com.main.ecommerce.entities.OrderItem;
+import com.main.ecommerce.entities.OrderPay;
 import com.main.ecommerce.entities.OrderStack;
 import com.main.ecommerce.entities.Product;
 import com.main.ecommerce.entities.User;
 import com.main.ecommerce.entities.UserOrder;
 import com.main.ecommerce.payment.PaymentMethod;
 import com.main.ecommerce.services.impl.OrderItemServiceImpl;
+import com.main.ecommerce.services.impl.OrderPayServiceImpl;
 import com.main.ecommerce.services.impl.OrderStackServiceImpl;
 import com.main.ecommerce.services.impl.ProductServiceImpl;
 import com.main.ecommerce.services.impl.UserOrderServiceImpl;
 import com.main.ecommerce.services.impl.UserServiceImpl;
+import com.main.ecommerce.status.OrderStatus;
 
 import java.time.LocalDateTime;
 
@@ -51,6 +54,9 @@ public class UserController {
 
     @Autowired
     private UserOrderServiceImpl userOrderServiceImpl;
+
+    @Autowired
+    private OrderPayServiceImpl orderPayServiceImpl;
 
     @PostMapping("/updateUser")
     public ResponseEntity<DataResponse> updateUser(@RequestHeader("Authorization") String jwt,
@@ -196,8 +202,46 @@ public class UserController {
 
         } catch (Exception e) {
             response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
-            response.setMessage("Order Placed failed");
+            response.setMessage("Order Placed failed or may be your cart not exists !");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
+    }
+
+    @PostMapping("/{orderId}/payment")
+    public ResponseEntity<DataResponse> proceedToPay(@RequestHeader("Authorization") String jwt,
+            @PathVariable long orderId) {
+
+        User user = this.userServiceImpl.getUserByJwt(jwt);
+
+        DataResponse response = new DataResponse();
+
+        try {
+
+            UserOrder userOrder = this.userOrderServiceImpl.getUserOrderById(orderId);
+
+            if (userOrder.getOrderStatus().equals(OrderStatus.COMPLETED)) {
+
+                response.setStatus(HttpStatus.BAD_REQUEST);
+                response.setMessage("Payment already done for this order !!");
+
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+
+            }
+
+            OrderPay orderPay = this.orderPayServiceImpl.proceedToPay(userOrder);
+
+            response.setStatus(HttpStatus.CREATED);
+            response.setMessage("Payment Completed Successfull");
+            response.setData(orderPay);
+
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+
+        } catch (Exception e) {
+            response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+            response.setMessage("Payment Failed");
+
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+
     }
 }
