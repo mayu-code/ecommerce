@@ -20,7 +20,7 @@ import com.main.ecommerce.services.impl.UserServiceImpl;
 import com.main.ecommerce.status.OrderStatus;
 
 import java.time.LocalDateTime;
-
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -190,7 +190,7 @@ public class UserController {
         try {
             OrderStack orderStack = this.orderStackServiceImpl.getOrderStackByUserId(user.getId());
 
-            userOrder.setPaymentMethod(PaymentMethod.PAYPAL);
+            // userOrder.setPaymentMethod(PaymentMethod.PAYPAL);
             userOrder.setTotalPaid(orderStack.getTotalPrice());
             userOrder.setTransitionId(UUID.randomUUID().toString());
 
@@ -247,7 +247,30 @@ public class UserController {
 
     }
 
+    @GetMapping("/orders")
     public ResponseEntity<DataResponse> getUserOrders(@RequestHeader("Authorization") String jwt) {
 
+        User user = this.userServiceImpl.getUserByJwt(jwt);
+        DataResponse response = new DataResponse();
+
+        try {
+            List<UserOrder> userOrders = this.userOrderServiceImpl.getUserOrderByUserid(user.getId());
+
+            response.setStatus(HttpStatus.OK);
+            response.setMessage("success");
+            response.setData(userOrders);
+
+            return ResponseEntity.ok().body(response);
+
+        } catch (Exception e) {
+
+            response.setStatus(HttpStatus.OK);
+            response.setMessage("success");
+            UserOrder userOrder = new UserOrder();
+            userOrder.setUser(user);
+            response.setData(userOrder);
+
+            return ResponseEntity.ok().body(response);
+        }
     }
 }
