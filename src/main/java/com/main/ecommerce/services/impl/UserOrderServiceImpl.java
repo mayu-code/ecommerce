@@ -1,5 +1,7 @@
 package com.main.ecommerce.services.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -44,6 +46,16 @@ public class UserOrderServiceImpl implements UserOrderService {
     @Override
     public UserOrder getUserOrderById(long orderId) {
         return this.userOrderRepository.findById(orderId).get();
+    }
+
+    @Override
+    public List<UserOrder> getUserOrderByUserid(long userId) {
+
+        List<UserOrder> userOrders = this.userOrderRepository.findByUserId(userId).stream()
+                .filter(order -> order.getOrderStatus().equals(OrderStatus.COMPLETED)).toList();
+
+        return userOrders;
+
     }
 
 }
