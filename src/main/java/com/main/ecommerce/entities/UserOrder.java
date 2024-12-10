@@ -1,44 +1,46 @@
 package com.main.ecommerce.entities;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.main.ecommerce.payment.PaymentMethod;
 import com.main.ecommerce.status.OrderStatus;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import lombok.Data;
-import lombok.Builder.Default;
 
 @Entity
 @Data
-public class OrderStack {
+public class UserOrder {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long stackId;
+    private Long orderId;
 
-    @OneToMany(mappedBy = "stack", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<OrderItem> Mycart = new ArrayList<>();
+    @OneToOne(mappedBy = "userOrder", fetch = FetchType.LAZY)
+    @JsonIgnore
+    private OrderStack orderStack;
 
-    private int totalPrice = 0;
+    private OrderStatus orderStatus = OrderStatus.PENDING;
 
-    private OrderStatus status = OrderStatus.PENDING;
+    private LocalDateTime orderDate = LocalDateTime.now();
+
+    private PaymentMethod paymentMethod;
+
+    private String shippingAddress;
+
+    private int totalPaid;
+
+    private String transitionId;
 
     @ManyToOne
     @JsonIgnore
     private User user;
-
-    @OneToOne
-    @JsonIgnore
-    private UserOrder userOrder;
 
 }
