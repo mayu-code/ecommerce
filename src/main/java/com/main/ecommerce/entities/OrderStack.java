@@ -35,4 +35,8 @@ public class OrderStack {
     @JsonIgnore
     private User user;
 
+    @OneToOne
+    @JsonIgnore
+    private UserOrder userOrder;
+
 }

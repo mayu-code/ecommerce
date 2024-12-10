@@ -8,14 +8,18 @@ import com.main.ecommerce.entities.OrderItem;
 import com.main.ecommerce.entities.OrderStack;
 import com.main.ecommerce.entities.Product;
 import com.main.ecommerce.entities.User;
+import com.main.ecommerce.entities.UserOrder;
+import com.main.ecommerce.payment.PaymentMethod;
 import com.main.ecommerce.services.impl.OrderItemServiceImpl;
 import com.main.ecommerce.services.impl.OrderStackServiceImpl;
 import com.main.ecommerce.services.impl.ProductServiceImpl;
+import com.main.ecommerce.services.impl.UserOrderServiceImpl;
 import com.main.ecommerce.services.impl.UserServiceImpl;
 
 import java.time.LocalDateTime;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -44,6 +48,9 @@ public class UserController {
 
     @Autowired
     private OrderStackServiceImpl orderStackServiceImpl;
+
+    @Autowired
+    private UserOrderServiceImpl userOrderServiceImpl;
 
     @PostMapping("/updateUser")
     public ResponseEntity<DataResponse> updateUser(@RequestHeader("Authorization") String jwt,
@@ -149,8 +156,8 @@ public class UserController {
     @PostMapping("/removeCart/{stackId}/{itemId}")
     public ResponseEntity<DataResponse> removeCartItem(@RequestHeader("Authorization") String jwt,
             @PathVariable("stackId") long stackId, @PathVariable("itemId") long itemId) {
-                OrderStack orderStack = new OrderStack();
-                DataResponse response = new DataResponse();
+        OrderStack orderStack = new OrderStack();
+        DataResponse response = new DataResponse();
         try {
             orderStack = this.orderStackServiceImpl.removeOrderItemFromCart(itemId, stackId);
             response.setData(orderStack);
@@ -161,6 +168,35 @@ public class UserController {
             response.setData(null);
             response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
             response.setMessage("failed");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+
+    @PostMapping("/myCart/placeOrder")
+    public ResponseEntity<DataResponse> placeOrder(@RequestHeader("Authorization") String jwt,
+            @RequestBody UserOrder userOrder) {
+
+        User user = this.userServiceImpl.getUserByJwt(jwt);
+        DataResponse response = new DataResponse();
+
+        try {
+            OrderStack orderStack = this.orderStackServiceImpl.getOrderStackByUserId(user.getId());
+
+            userOrder.setPaymentMethod(PaymentMethod.PAYPAL);
+            userOrder.setTotalPaid(orderStack.getTotalPrice());
+            userOrder.setTransitionId(UUID.randomUUID().toString());
+
+            UserOrder createdOrder = this.userOrderServiceImpl.creatOrder(userOrder, orderStack.getStackId());
+
+            response.setStatus(HttpStatus.CREATED);
+            response.setMessage("Order Placed Success");
+            response.setData(createdOrder);
+
+            return ResponseEntity.ok().body(response);
+
+        } catch (Exception e) {
+            response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+            response.setMessage("Order Placed failed");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }

@@ -45,12 +45,13 @@ public class User implements UserDetails {
 	@OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<Address> addresses = new ArrayList<>();
 
-
 	// order methods don't see above methods
 
-	@OneToMany(mappedBy = "user" , cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<OrderStack> stack;
 
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<UserOrder> myOrders;
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
