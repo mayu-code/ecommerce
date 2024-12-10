@@ -17,7 +17,9 @@ public class PracticeController {
     @PostMapping("/images")
     public String imageAdder(@RequestParam("image")MultipartFile file){
         String url = imageUploader.iamgeUploader(file);
+        System.out.println("ok");
         return url;
     }
+    
 
 }
